@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+
 import { PhotosService } from "../photos.service"
 
 @Component({
@@ -6,7 +7,8 @@ import { PhotosService } from "../photos.service"
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss']
 })
-export class GalleryComponent implements OnInit {
+export class GalleryComponent implements OnInit, AfterViewInit {
+
     photosList: Array<{}>;
 
     constructor(photosService: PhotosService) {
@@ -16,7 +18,6 @@ export class GalleryComponent implements OnInit {
     ngOnInit() {
     }
 
-    log() {
-        console.log(this.photosList)
+    ngAfterViewInit() {
     }
 }

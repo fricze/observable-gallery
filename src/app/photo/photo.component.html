@@ -1,0 +1,17 @@
+<img [src]="photo.url">
+
+<textarea [(ngModel)]="photo.description"
+          #photoDescription
+          name="photoDescription"
+          matInput placeholder="Textarea">
+</textarea>
+
+<div class="description-state">
+    {{ (this.savingDescription | async)?.text }}
+
+    <div *ngIf="(this.savingDescription | async)?.saving">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
+
+<p>photo works!</p>
