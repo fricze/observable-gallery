@@ -1,0 +1,27 @@
+.photos {
+    display: flex;
+}
+
+.photo {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+
+    & + & {
+        margin-left: 1rem;
+    }
+
+    textarea {
+        font-size: 1rem;
+        height: 10rem;
+    }
+
+    img {
+        width: 200px;
+        height: 100%;
+        overflow: hidden;
+        object-fit: cover;
+    }
+}

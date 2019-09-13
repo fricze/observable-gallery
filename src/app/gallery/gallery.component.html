@@ -1,0 +1,13 @@
+<div class="photos">
+    <div *ngFor="let photo of photosList" class="photo">
+        <img [src]="photo.url">
+
+        <textarea [(ngModel)]="photo.description"
+                  name="photoDescription"
+                  (keyup.enter)="log()"
+                  matInput placeholder="Textarea"></textarea>
+        <!-- <mat-form-field>
+             <textarea matInput placeholder="Textarea"></textarea>
+             </mat-form-field> -->
+    </div>
+</div>
