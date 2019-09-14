@@ -7,8 +7,6 @@
 </textarea>
 
 <div class="description-state">
-    {{ (this.savingDescription | async)?.text }}
-
     <div *ngIf="(this.savingDescription | async)?.saving">
         <mat-spinner [diameter]="40"></mat-spinner>
     </div>
