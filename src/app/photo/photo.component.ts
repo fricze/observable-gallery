@@ -18,12 +18,12 @@ export class PhotoComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         const source = fromEvent(this.photoDescription.nativeElement, 'input')
             .pipe(
-                debounceTime(1000),
+                debounceTime(1400),
                 switchMap(() =>
                     merge(
-                        of({ text: "autosave…", saving: true }),
+                        of({ text: "", saving: true }),
                         of({ text: "", saving: false }).pipe(
-                            delay(400),
+                            delay(600),
                         )
                     )
                 ),
