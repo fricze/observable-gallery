@@ -1,0 +1,16 @@
+.categories {
+    display: flex;
+    margin: 2rem 0;
+}
+
+.category {
+    font-size: 2rem;
+    border-bottom: 1px solid #333;
+    padding-right: 1rem;
+    margin: 0 2rem;
+    cursor: pointer;
+
+    &:hover {
+        color: #00baff;
+    }
+}

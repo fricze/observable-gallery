@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { PhotoComponent } from './photo/photo.component';
 import { UploadPhotoComponent } from './upload-photo/upload-photo.component';
+import { CategoriesComponent } from './categories/categories.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         GalleryComponent,
         PhotoComponent,
-        UploadPhotoComponent
+        UploadPhotoComponent,
+        CategoriesComponent
     ],
     imports: [
         BrowserModule,
