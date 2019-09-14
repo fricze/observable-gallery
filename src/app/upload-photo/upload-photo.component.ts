@@ -17,7 +17,6 @@ const toBase64 = (file: File) => new Promise((resolve, reject) => {
     styleUrls: ['./upload-photo.component.scss']
 })
 export class UploadPhotoComponent {
-
     constructor(private photosService: PhotosService) { }
 
     handleFileInput(files: Array<File>) {
