@@ -9,12 +9,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { PhotoComponent } from './photo/photo.component';
+import { UploadPhotoComponent } from './upload-photo/upload-photo.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         GalleryComponent,
-        PhotoComponent
+        PhotoComponent,
+        UploadPhotoComponent
     ],
     imports: [
         BrowserModule,

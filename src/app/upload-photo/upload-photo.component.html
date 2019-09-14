@@ -1,0 +1,8 @@
+<div class="form-group">
+    <label for="file">Choose File</label>
+    <input type="file"
+           multiple="multiple"
+           id="file"
+           accept="image/png, image/jpg, image/jpeg"
+           (change)="handleFileInput($event.target.files)">
+</div>

@@ -1,4 +1,7 @@
-import { Input, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+    Input, AfterViewInit, Component,
+    ElementRef, ViewChild
+} from '@angular/core';
 import { merge, of, BehaviorSubject, fromEvent } from 'rxjs';
 import {
     skip, distinctUntilChanged, map, mapTo, debounceTime,
