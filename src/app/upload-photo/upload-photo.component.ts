@@ -26,7 +26,9 @@ export class UploadPhotoComponent {
             filesCollection.map(file => toBase64(file))
         ).pipe(
             map(filesSources => zipWith(
-                (source, file) => ({ name: file.name, url: source, description: "" }),
+                (source, file) => ({
+                    name: file.name, url: source, description: "", categoryID: -1,
+                }),
                 filesSources, filesCollection
             ))
         )

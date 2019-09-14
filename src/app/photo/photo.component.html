@@ -1,5 +1,7 @@
 <img [src]="photo.url">
 
+<p class="photo-category">category: {{ photo.category.name }}</p>
+
 <textarea [(ngModel)]="photo.description"
           #photoDescription
           name="photoDescription"
