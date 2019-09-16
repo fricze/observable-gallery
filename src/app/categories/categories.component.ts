@@ -21,10 +21,6 @@ export class CategoriesComponent implements OnInit {
 
     ngOnInit() {
         this.categoriesList$ = this.categoriesService.getCategories$()
-
-        this.categoriesService.categories$.subscribe(a => console.log(a))
-        this.categoriesService.newCategory$.subscribe(a => console.log(a))
-        this.categoriesList$.subscribe(a => console.log(a))
     }
 
     setActiveCategory(categoryID: string) {
