@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { combineLatest, Observable } from "rxjs"
-import { withLatestFrom, map } from "rxjs/operators"
+import { tap, withLatestFrom, map } from "rxjs/operators"
 import { zipWith } from "ramda"
 import { PhotosService } from "../photos.service"
 import { CategoriesService } from "../categories.service"
@@ -21,7 +21,9 @@ export class UploadPhotoComponent {
     constructor(private photosService: PhotosService,
         private categoriesService: CategoriesService) { }
 
-    handleFileInput(files: Array<File>) {
+    filesCollection: File[]
+
+    handleFileInput(files: File[]) {
         const filesCollection = Array.from(files)
 
         const newFiles$ = combineLatest(
@@ -37,7 +39,8 @@ export class UploadPhotoComponent {
                     name: file.name, url: source, description: "", categoryID: activeCategory,
                 }),
                 filesSources, filesCollection
-            ))
+            )),
+            tap(() => this.filesCollection = [])
         )
 
         imagesSources$.subscribe(photos => this.photosService.addPhotos(photos))
