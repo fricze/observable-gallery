@@ -1,10 +1,11 @@
 <div class="categories">
-    <div *ngFor="let category of categoriesList"
+    <div *ngFor="let category of categoriesList$ | async"
          class="category" draggable="true"
          (click)="setActiveCategory(category.id)">
         {{ category.name }}
     </div>
 
     <input class="new-category" type="text" placeholder="new&thinsp;+"
-           (keyup.enter)="newCategory.next($event.target.value)">
+           [(ngModel)]="newCategoryName"
+           (keyup.enter)="addNewCategory($event.target.value)">
 </div>

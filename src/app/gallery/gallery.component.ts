@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PhotosService } from "../photos.service"
 import { CategoriesService } from "../categories.service"
-import { merge } from "ramda"
 import { Observable } from 'rxjs';
 import { map } from "rxjs/operators"
 
@@ -22,15 +21,9 @@ export class GalleryComponent implements OnInit {
 
     ngOnInit() {
         this.photosList$ = this.categoriesService.getActiveCategory().pipe(
-            map(activeCategoryID =>
-                this.photosService.getPhotosList().map(
-                    photo => merge(photo, {
-                        category: this.categoriesService.getByID(photo.categoryID)
-                    })
-                ).filter(
-                    photo => photo.categoryID === activeCategoryID
-                ))
+            map(activeCategoryID => this.photosService.getPhotosList().filter(
+                photo => photo.categoryID === activeCategoryID
+            ))
         )
-
     }
 }

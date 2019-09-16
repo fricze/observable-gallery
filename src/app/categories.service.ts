@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs"
+import { Subject, BehaviorSubject } from "rxjs"
+// import { map } from "rxjs/operators"
 
 @Injectable({
     providedIn: 'root'
 })
 export class CategoriesService {
-    categories = [
+    categories$ = new BehaviorSubject([
         { name: "Private", id: "priv", },
         { name: "Public", id: "pub", },
-    ]
+    ])
 
-    activeCategory = new BehaviorSubject(this.categories[0].id)
+    newCategory$ = new Subject()
 
-    public getByID(categoryID) {
-        return this.categories.find(({ id }) => id === categoryID)
-    }
+    activeCategory = new BehaviorSubject("priv")
+
+    // public getByID(categoryID) {
+    //     return this.categories$.pipe(
+    //         map(categories => categories.find(({ id }) => id === categoryID))
+    //     )
+    // }
 
     public getActiveCategory() {
         return this.activeCategory

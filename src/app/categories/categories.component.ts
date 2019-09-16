@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from "../categories.service"
-import { Subject } from "rxjs"
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-categories',
@@ -8,16 +8,19 @@ import { Subject } from "rxjs"
     styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
-    categoriesList: { name: string; }[];
+    categoriesList$: Observable<{ name: string; }[]>;
 
-    newCategory = new Subject()
+    newCategoryName = ""
 
-    constructor(private categoriesService: CategoriesService) {
-        this.newCategory.subscribe(a => console.log(a))
+    constructor(private categoriesService: CategoriesService) {}
+
+    addNewCategory(name) {
+        this.categoriesService.newCategory$.next(name)
+        this.newCategoryName = ""
     }
 
     ngOnInit() {
-        this.categoriesList = this.categoriesService.categories
+        this.categoriesList$ = this.categoriesService.categories$
     }
 
     setActiveCategory(categoryID) {
