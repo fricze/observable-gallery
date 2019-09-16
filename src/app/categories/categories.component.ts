@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from "../categories.service"
+import { Subject } from "rxjs"
 
 @Component({
     selector: 'app-categories',
@@ -9,11 +10,14 @@ import { CategoriesService } from "../categories.service"
 export class CategoriesComponent implements OnInit {
     categoriesList: { name: string; }[];
 
+    newCategory = new Subject()
+
     constructor(private categoriesService: CategoriesService) {
-        this.categoriesList = this.categoriesService.categories
+        this.newCategory.subscribe(a => console.log(a))
     }
 
     ngOnInit() {
+        this.categoriesList = this.categoriesService.categories
     }
 
     setActiveCategory(categoryID) {
