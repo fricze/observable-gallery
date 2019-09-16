@@ -10,9 +10,13 @@ export class CategoriesComponent implements OnInit {
     categoriesList: { name: string; }[];
 
     constructor(private categoriesService: CategoriesService) {
-        this.categoriesList = categoriesService.categories
+        this.categoriesList = this.categoriesService.categories
     }
 
     ngOnInit() {
+    }
+
+    setActiveCategory(categoryID) {
+        this.categoriesService.setActiveCategoryByID(categoryID)
     }
 }

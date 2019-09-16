@@ -1,6 +1,7 @@
 <div class="categories">
     <div *ngFor="let category of categoriesList"
-         class="category" draggable="true">
+         class="category" draggable="true"
+         (click)="setActiveCategory(category.id)">
         {{ category.name }}
     </div>
 

@@ -24,9 +24,13 @@ const initialPhotos = [
 export class PhotosService {
     constructor() { }
 
-    photos = initialPhotos
+    private photos = initialPhotos
 
     addPhotos(photos) {
         this.photos.push(...photos);
+    }
+
+    getPhotosList() {
+        return this.photos
     }
 }
