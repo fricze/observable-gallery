@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { combineLatest } from "rxjs"
-import { map } from "rxjs/operators"
+import { combineLatest, Observable } from "rxjs"
+import { withLatestFrom, map } from "rxjs/operators"
 import { zipWith } from "ramda"
 import { PhotosService } from "../photos.service"
+import { CategoriesService } from "../categories.service"
 
 const toBase64 = (file: File) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -17,17 +18,23 @@ const toBase64 = (file: File) => new Promise((resolve, reject) => {
     styleUrls: ['./upload-photo.component.scss']
 })
 export class UploadPhotoComponent {
-    constructor(private photosService: PhotosService) { }
+    constructor(private photosService: PhotosService,
+        private categoriesService: CategoriesService) { }
 
     handleFileInput(files: Array<File>) {
         const filesCollection = Array.from(files)
 
-        const imagesSources$ = combineLatest(
+        const newFiles$ = combineLatest(
             filesCollection.map(file => toBase64(file))
-        ).pipe(
-            map(filesSources => zipWith(
-                (source, file) => ({
-                    name: file.name, url: source, description: "", categoryID: -1,
+        )
+
+        const activeCategory$: Observable<string> = this.categoriesService.activeCategory
+
+        const imagesSources$ = newFiles$.pipe(
+            withLatestFrom(activeCategory$),
+            map(([filesSources, activeCategory]) => zipWith(
+                (source: string, file: File) => ({
+                    name: file.name, url: source, description: "", categoryID: activeCategory,
                 }),
                 filesSources, filesCollection
             ))
