@@ -14,16 +14,20 @@ export class CategoriesComponent implements OnInit {
 
     constructor(private categoriesService: CategoriesService) {}
 
-    addNewCategory(name) {
+    addNewCategory(name: string) {
         this.categoriesService.newCategory$.next(name)
         this.newCategoryName = ""
     }
 
     ngOnInit() {
-        this.categoriesList$ = this.categoriesService.categories$
+        this.categoriesList$ = this.categoriesService.getCategories$()
+
+        this.categoriesService.categories$.subscribe(a => console.log(a))
+        this.categoriesService.newCategory$.subscribe(a => console.log(a))
+        this.categoriesList$.subscribe(a => console.log(a))
     }
 
-    setActiveCategory(categoryID) {
+    setActiveCategory(categoryID: string) {
         this.categoriesService.setActiveCategoryByID(categoryID)
     }
 }

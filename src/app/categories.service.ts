@@ -1,31 +1,43 @@
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject } from "rxjs"
-// import { map } from "rxjs/operators"
+import { combineLatest, Subject, BehaviorSubject } from "rxjs"
+import { scan, map, startWith } from "rxjs/operators"
+
+type Category = {
+    name: string;
+    id: string;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class CategoriesService {
-    categories$ = new BehaviorSubject([
+    private initialCategories = [
         { name: "Private", id: "priv", },
         { name: "Public", id: "pub", },
-    ])
+    ]
 
-    newCategory$ = new Subject()
+    categories$ = new BehaviorSubject(this.initialCategories)
+
+    newCategory$: Subject<string> = new Subject()
 
     activeCategory = new BehaviorSubject("priv")
 
-    // public getByID(categoryID) {
-    //     return this.categories$.pipe(
-    //         map(categories => categories.find(({ id }) => id === categoryID))
-    //     )
-    // }
+    private newCategories$ = this.newCategory$.pipe(
+        scan((a, c: Category) => a.concat([{ name: c, id: c }]), []),
+    )
+
+    public getCategories$() {
+        return combineLatest(this.categories$, this.newCategories$).pipe(
+            map(([categories, newCategories]) => categories.concat(newCategories)),
+            startWith(this.initialCategories),
+        )
+    }
 
     public getActiveCategory() {
         return this.activeCategory
     }
 
-    public setActiveCategoryByID(categoryID) {
+    public setActiveCategoryByID(categoryID: string) {
         this.activeCategory.next(categoryID)
     }
 }
