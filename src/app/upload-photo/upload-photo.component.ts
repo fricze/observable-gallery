@@ -30,19 +30,22 @@ export class UploadPhotoComponent {
             filesCollection.map(file => toBase64(file))
         )
 
-        const activeCategory$: Observable<string> = this.categoriesService.activeCategory
+        const activeCategory$: Observable<string> =
+            this.categoriesService.activeCategory
 
         const imagesSources$ = newFiles$.pipe(
             withLatestFrom(activeCategory$),
             map(([filesSources, activeCategory]) => zipWith(
                 (source: string, file: File) => ({
-                    name: file.name, url: source, description: "", categoryID: activeCategory,
+                    name: file.name, url: source,
+                    description: "", categoryID: activeCategory,
                 }),
                 filesSources, filesCollection
             )),
             tap(() => this.filesCollection = [])
         )
 
-        imagesSources$.subscribe(photos => this.photosService.addPhotos(photos))
+        imagesSources$.subscribe(photos =>
+            this.photosService.newPhotos$.next(photos))
     }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 const initialPhotos = [
     {
@@ -22,11 +23,19 @@ const initialPhotos = [
     providedIn: 'root'
 })
 export class PhotosService {
-    constructor() { }
+    constructor() {
+        this.newPhotos$.subscribe(a => console.log(a))
+
+        this.newPhotos$.subscribe(photos => this.addPhotos(photos))
+    }
 
     private photos = initialPhotos
 
+    newPhotos$ = new Subject()
+
     addPhotos(photos) {
+        console.log(photos)
+
         this.photos.push(...photos);
     }
 
