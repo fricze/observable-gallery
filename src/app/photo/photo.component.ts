@@ -2,10 +2,10 @@ import {
     Input, AfterViewInit, Component,
     ElementRef, ViewChild
 } from '@angular/core';
-import { merge, of, BehaviorSubject, fromEvent } from 'rxjs';
+import { merge, of, fromEvent, Observable } from 'rxjs';
 import {
-    skip, distinctUntilChanged, map, mapTo, debounceTime,
-    delay, switchMap, startWith
+    withLatestFrom, distinctUntilChanged, map, mapTo, debounceTime,
+    delay, switchMap, switchAll,
 } from 'rxjs/operators';
 
 const descriptionState = {
@@ -24,38 +24,43 @@ export class PhotoComponent implements AfterViewInit {
 
     @Input() photo: { description: string; };
 
-    savingDescription = new BehaviorSubject(descriptionState.still);
+    savingDescription$: Observable<any>;
 
     ngAfterViewInit() {
         const descriptionElement = this.photoDescription.nativeElement
         const input$ = fromEvent(descriptionElement, 'input')
-            .pipe(debounceTime(1400))
+
+        const inputSampled$ = input$.pipe(debounceTime(1400))
+
+        const photoDescription$ = fromEvent(descriptionElement, 'input')
+            .pipe(
+                map((event: Event) => (<HTMLInputElement>event.target).value)
+            )
 
         const enter$ = fromEvent(descriptionElement, 'focus')
         const leave$ = fromEvent(descriptionElement, 'blur').pipe(
-            startWith(this.photo.description),
-            map(() => this.photo.description),
+            withLatestFrom(photoDescription$),
+            map(([, description]) => description),
             distinctUntilChanged(),
-            skip(1),
         )
 
-        const source = merge(
+        const getSavingState$ = () => merge(
+            of(descriptionState.saving),
+            of(descriptionState.still).pipe(
+                delay(600),
+            )
+        )
+
+        this.savingDescription$ = merge(
             enter$.pipe(
-                mapTo(input$),
+                mapTo(inputSampled$),
             ),
             leave$.pipe(
                 mapTo(of(true))
             )
         ).pipe(
-            switchMap(obs => obs),
-            switchMap(() => merge(
-                of(descriptionState.saving),
-                of(descriptionState.still).pipe(
-                    delay(600),
-                )
-            )),
+            switchAll(),
+            switchMap(getSavingState$),
         );
-
-        source.subscribe(this.savingDescription);
     }
 }
