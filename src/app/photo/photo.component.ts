@@ -8,10 +8,19 @@ import {
     delay, switchMap, switchAll,
 } from 'rxjs/operators';
 
-const descriptionState = {
+type DescriptionState = { saving: boolean; }
+
+const descriptionState: { [k: string]: DescriptionState; } = {
     saving: { saving: true },
     still: { saving: false },
 }
+
+const getSavingState$ = () => merge(
+    of(descriptionState.saving),
+    of(descriptionState.still).pipe(
+        delay(600),
+    )
+)
 
 @Component({
     selector: 'app-photo',
@@ -24,7 +33,7 @@ export class PhotoComponent implements AfterViewInit {
 
     @Input() photo: { description: string; };
 
-    savingDescription$: Observable<any>;
+    savingDescription$: Observable<DescriptionState>;
 
     ngAfterViewInit() {
         const descriptionElement = this.photoDescription.nativeElement
@@ -42,13 +51,6 @@ export class PhotoComponent implements AfterViewInit {
             withLatestFrom(photoDescription$),
             map(([, description]) => description),
             distinctUntilChanged(),
-        )
-
-        const getSavingState$ = () => merge(
-            of(descriptionState.saving),
-            of(descriptionState.still).pipe(
-                delay(600),
-            )
         )
 
         this.savingDescription$ = merge(
