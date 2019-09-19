@@ -33,7 +33,7 @@ export class CategoriesService {
 
     public getCategories$() {
         return combineLatest(this.categories$, this.newCategories$).pipe(
-            map((collection: Array<{}>) => flatten(collection)),
+            map((collection: Array<Array<Category>>) => flatten(collection)),
         )
     }
 
