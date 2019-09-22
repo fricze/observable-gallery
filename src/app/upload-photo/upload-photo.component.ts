@@ -1,16 +1,9 @@
 import { Component } from '@angular/core';
-import { forkJoin, combineLatest, Observable } from "rxjs"
-import { tap, withLatestFrom, map } from "rxjs/operators"
-import { zipWith } from "ramda"
+import { forkJoin } from "rxjs"
+import { map } from "rxjs/operators"
 import { PhotosService } from "../photos.service"
 import uuid from "uuidv4"
-
-const toBase64 = (file: File) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
+import { FileContent, readFileContent } from "../read-file-content"
 
 @Component({
     selector: 'app-upload-photo',
@@ -22,26 +15,27 @@ export class UploadPhotoComponent {
         private photosService: PhotosService,
     ) { }
 
-    filesCollection: File[]
+    handleFileInput(images: File[]) {
+        const imagesCollection = Array.from(images)
+        const imagesContent: Array<Promise<FileContent>> =
+            imagesCollection.map(file => readFileContent(file))
 
-    handleFileInput(files: File[]) {
-        const filesCollection = Array.from(files)
+        const uploadedImages$ = forkJoin(imagesContent).pipe(
+            map(imagesSources => {
+                const imagesWithSource = imagesCollection.map(
+                    (image, idx) => ({
+                        name: image.name,
+                        id: uuid(),
+                        url: imagesSources[idx]
+                    })
+                )
 
-        const newFiles$ = forkJoin(
-            filesCollection.map(file => toBase64(file))
+                return imagesWithSource
+            }),
         )
 
-        const imagesSources$ = newFiles$.pipe(
-            map(filesSources => zipWith(
-                (source: string, file: File) => ({
-                    name: file.name, url: source,
-                    id: uuid()
-                }),
-                filesSources, filesCollection
-            )),
+        uploadedImages$.subscribe(
+            photos => this.photosService.newPhotos$.next(photos)
         )
-
-        imagesSources$.subscribe(photos =>
-            this.photosService.newPhotos$.next(photos))
     }
 }
