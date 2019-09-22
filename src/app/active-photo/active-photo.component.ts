@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PhotosService } from "../photos.service"
 import { Observable } from 'rxjs';
 import { Photo } from "../photo"
