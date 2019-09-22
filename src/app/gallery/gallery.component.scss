@@ -1,11 +1,12 @@
 .photos {
     display: flex;
     flex-wrap: wrap;
-    width: 50vw;
+    position: relative;
 }
 
 .photo {
-    width: 200px;
+    width: 300px;
+    height: 300px;
     display: flex;
     flex-direction: column;
     padding-bottom: 1rem;

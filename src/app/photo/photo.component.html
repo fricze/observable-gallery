@@ -1,14 +1,1 @@
-<img [src]="photo.url">
-
-<!-- <textarea [(ngModel)]="photo.description"
-     #photoDescription
-     name="photoDescription"
-     matInput
-     placeholder="Photo description">
-     </textarea> -->
-
-<!-- <div class="description-state">
-     <div *ngIf="(this.savingDescription | async)?.saving">
-     <mat-spinner [diameter]="40"></mat-spinner>
-     </div>
-     </div> -->
+<img (click)="onPhotoClick(photo.id)" [src]="photo.url">

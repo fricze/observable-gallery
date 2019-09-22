@@ -7,6 +7,7 @@ import {
     withLatestFrom, distinctUntilChanged, map, mapTo, debounceTime,
     delay, switchMap, switchAll,
 } from 'rxjs/operators';
+import { PhotosService } from "../photos.service"
 
 type DescriptionState = { saving: boolean; }
 
@@ -22,6 +23,37 @@ const getSavingState$ = () => merge(
     )
 )
 
+const savingDescription = () => {
+    const descriptionElement = this.photoDescription.nativeElement
+    const input$ = fromEvent(descriptionElement, 'input')
+
+    const inputSampled$ = input$.pipe(debounceTime(1400))
+
+    const photoDescription$ = fromEvent(descriptionElement, 'input')
+        .pipe(
+            map((event: Event) => (<HTMLInputElement>event.target).value)
+        )
+
+    const enter$ = fromEvent(descriptionElement, 'focus')
+    const leave$ = fromEvent(descriptionElement, 'blur').pipe(
+        withLatestFrom(photoDescription$),
+        map(([, description]) => description),
+        distinctUntilChanged(),
+    )
+
+    this.savingDescription$ = merge(
+        enter$.pipe(
+            mapTo(inputSampled$),
+        ),
+        leave$.pipe(
+            mapTo(of(true))
+        )
+    ).pipe(
+        switchAll(),
+        switchMap(getSavingState$),
+    );
+}
+
 @Component({
     selector: 'app-photo',
     templateUrl: './photo.component.html',
@@ -31,38 +63,15 @@ export class PhotoComponent implements AfterViewInit {
     @ViewChild("photoDescription", { static: false })
     photoDescription: ElementRef;
 
+    constructor(private photosService: PhotosService, ) { }
+
     @Input() photo: { description: string; };
 
     savingDescription$: Observable<DescriptionState>;
 
-    ngAfterViewInit() {
-        // const descriptionElement = this.photoDescription.nativeElement
-        // const input$ = fromEvent(descriptionElement, 'input')
+    ngAfterViewInit() {}
 
-        // const inputSampled$ = input$.pipe(debounceTime(1400))
-
-        // const photoDescription$ = fromEvent(descriptionElement, 'input')
-        //     .pipe(
-        //         map((event: Event) => (<HTMLInputElement>event.target).value)
-        //     )
-
-        // const enter$ = fromEvent(descriptionElement, 'focus')
-        // const leave$ = fromEvent(descriptionElement, 'blur').pipe(
-        //     withLatestFrom(photoDescription$),
-        //     map(([, description]) => description),
-        //     distinctUntilChanged(),
-        // )
-
-        // this.savingDescription$ = merge(
-        //     enter$.pipe(
-        //         mapTo(inputSampled$),
-        //     ),
-        //     leave$.pipe(
-        //         mapTo(of(true))
-        //     )
-        // ).pipe(
-        //     switchAll(),
-        //     switchMap(getSavingState$),
-        // );
+    onPhotoClick(photoID: string) {
+        this.photosService.activePhoto$.next(photoID)
     }
 }
