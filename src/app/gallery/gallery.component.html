@@ -1,6 +1,4 @@
 <div>
-    <app-upload-photo></app-upload-photo>
-
     <div class="photos">
         <div *ngFor="let photo of photosList$ | async" class="photo">
             <app-photo [photo]="photo"></app-photo>

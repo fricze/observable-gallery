@@ -36,33 +36,33 @@ export class PhotoComponent implements AfterViewInit {
     savingDescription$: Observable<DescriptionState>;
 
     ngAfterViewInit() {
-        const descriptionElement = this.photoDescription.nativeElement
-        const input$ = fromEvent(descriptionElement, 'input')
+        // const descriptionElement = this.photoDescription.nativeElement
+        // const input$ = fromEvent(descriptionElement, 'input')
 
-        const inputSampled$ = input$.pipe(debounceTime(1400))
+        // const inputSampled$ = input$.pipe(debounceTime(1400))
 
-        const photoDescription$ = fromEvent(descriptionElement, 'input')
-            .pipe(
-                map((event: Event) => (<HTMLInputElement>event.target).value)
-            )
+        // const photoDescription$ = fromEvent(descriptionElement, 'input')
+        //     .pipe(
+        //         map((event: Event) => (<HTMLInputElement>event.target).value)
+        //     )
 
-        const enter$ = fromEvent(descriptionElement, 'focus')
-        const leave$ = fromEvent(descriptionElement, 'blur').pipe(
-            withLatestFrom(photoDescription$),
-            map(([, description]) => description),
-            distinctUntilChanged(),
-        )
+        // const enter$ = fromEvent(descriptionElement, 'focus')
+        // const leave$ = fromEvent(descriptionElement, 'blur').pipe(
+        //     withLatestFrom(photoDescription$),
+        //     map(([, description]) => description),
+        //     distinctUntilChanged(),
+        // )
 
-        this.savingDescription$ = merge(
-            enter$.pipe(
-                mapTo(inputSampled$),
-            ),
-            leave$.pipe(
-                mapTo(of(true))
-            )
-        ).pipe(
-            switchAll(),
-            switchMap(getSavingState$),
-        );
+        // this.savingDescription$ = merge(
+        //     enter$.pipe(
+        //         mapTo(inputSampled$),
+        //     ),
+        //     leave$.pipe(
+        //         mapTo(of(true))
+        //     )
+        // ).pipe(
+        //     switchAll(),
+        //     switchMap(getSavingState$),
+        // );
     }
 }

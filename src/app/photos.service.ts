@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Photo } from "./photo"
 
-const initialPhotos = [
+const initialPhotos: Photo[] = [
     {
         url: "https://66.media.tumblr.com/dff05f90167b5e50eab4df4f61a309aa/tumblr_o1ro152Q1m1rbkxlgo1_500.jpg",
         description: "",
@@ -24,8 +25,6 @@ const initialPhotos = [
 })
 export class PhotosService {
     constructor() {
-        this.newPhotos$.subscribe(a => console.log(a))
-
         this.newPhotos$.subscribe(photos => this.addPhotos(photos))
     }
 
@@ -34,8 +33,6 @@ export class PhotosService {
     newPhotos$ = new Subject()
 
     addPhotos(photos) {
-        console.log(photos)
-
         this.photos.push(...photos);
     }
 
