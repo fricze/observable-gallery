@@ -1,14 +1,14 @@
-.photos {
+.photos-list {
     display: flex;
     flex-wrap: wrap;
-    position: relative;
+    margin-top: 3rem;
 }
 
 .photo {
-    width: 300px;
-    height: 300px;
+    width: 18vw;
+    height: 20vw;
     display: flex;
     flex-direction: column;
     padding-bottom: 1rem;
-    margin: 0 1rem;
+    margin-left: 1.7vw;
 }

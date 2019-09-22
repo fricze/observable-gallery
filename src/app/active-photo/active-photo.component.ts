@@ -9,13 +9,13 @@ import { Photo } from "../photo"
   styleUrls: ['./active-photo.component.scss']
 })
 export class ActivePhotoComponent {
-    activePhoto$: Observable<Photo> = this.photosService.getActivePhoto$();
+    activePhoto$: Observable<Photo> = this.photosService.activePhoto$;
 
     constructor(
         private photosService: PhotosService,
     ) { }
 
     hidePhoto() {
-        this.photosService.activePhoto$.next("-1");
+        this.photosService.activePhotoID$.next("-1");
     }
 }

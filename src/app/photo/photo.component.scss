@@ -5,28 +5,22 @@
 }
 
 :host {
-    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+
+    &, img {
+        transition: all 0.2s ease-in-out;
+    }
+
+    img {
+        object-fit: cover;
+    }
 
     &:hover {
         opacity: 0.9;
         filter: drop-shadow(9px 9px 10px #333) contrast(140%);
+
+        img {
+            transform: scale(1.05);
+        }
     }
-}
-
-img {
-    object-fit: cover;
-}
-
-textarea {
-    font-size: 1rem;
-    height: 5rem;
-    width: 100%;
-}
-
-.description-state {
-    font-style: italic;
-}
-
-.photo-category {
-    font-variant: all-small-caps;
 }

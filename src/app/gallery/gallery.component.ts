@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PhotosService } from "../photos.service"
-import { Observable } from 'rxjs';
 import { Photo } from "../photo"
 
 @Component({
@@ -9,7 +8,7 @@ import { Photo } from "../photo"
     styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent {
-    photosList$: Observable<Photo[]> = this.photosService.getPhotosList$();
+    photosList: Photo[] = this.photosService.getPhotosList();
 
     constructor(
         private photosService: PhotosService,

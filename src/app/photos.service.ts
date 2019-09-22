@@ -1,26 +1,23 @@
 import { Injectable } from '@angular/core';
 import { of, combineLatest, Subject, BehaviorSubject, Observable } from 'rxjs';
-import { map as map$ } from "rxjs/operators"
-import { merge, map } from "ramda"
+import { map } from "rxjs/operators"
+import { merge } from "ramda"
 import { Photo } from "./photo"
 
 const initialPhotos: Photo[] = [
     {
         "url": "https://66.media.tumblr.com/dff05f90167b5e50eab4df4f61a309aa/tumblr_o1ro152Q1m1rbkxlgo1_500.jpg",
         "description": "",
-        "categoryID": "pub",
         "id": "6d3238a0-8e7b-4f58-b799-37ad6072097e"
     },
     {
         "url": "https://66.media.tumblr.com/be45669e5825a1db9c22c730c00eb5db/tumblr_o6ckp64vBe1vnm7bio1_500.jpg",
         "description": "",
-        "categoryID": "priv",
         "id": "eec3632f-2364-47d5-8f87-504b98c8fc83"
     },
     {
         "url": "https://66.media.tumblr.com/9251ed46399400b08d15993800972c08/tumblr_pw9iqdF4Qr1tfqi0so1_500.jpg",
         "description": "",
-        "categoryID": "priv",
         "id": "02cc506c-a6f4-47f7-856b-cceec9e54190"
     },
     {
@@ -45,12 +42,6 @@ const initialPhotos: Photo[] = [
     }
 ]
 
-const setActivePhoto = ([photos, activePhotoID]: [Photo[], string]): Photo[] =>
-    map(
-        photo => merge(photo, { active: photo.id === activePhotoID }),
-        photos
-    )
-
 @Injectable({
     providedIn: 'root'
 })
@@ -62,20 +53,20 @@ export class PhotosService {
     private photos: Photo[] = initialPhotos
 
     newPhotos$ = new Subject()
-
-    activePhoto$ = new BehaviorSubject("-1")
-
     addPhotos(photos) {
         this.photos.push(...photos);
     }
 
-    getActivePhoto$(): Observable<Photo> {
-        return this.activePhoto$.pipe(
-            map$(photoID => this.photos.find(({ id }) => id === photoID))
-        )
-    }
+    noPhotoID = ""
+    activePhotoID$ = new BehaviorSubject(this.noPhotoID)
 
-    getPhotosList$(): Observable<Photo[]> {
-        return of(this.photos)
+    findPhotoByID = (photoID: string) => this.photos.find(({ id }) => id === photoID)
+
+    activePhoto$: Observable<Photo> = this.activePhotoID$.pipe(
+        map(this.findPhotoByID)
+    )
+
+    getPhotosList(): Photo[] {
+        return this.photos
     }
 }

@@ -72,6 +72,6 @@ export class PhotoComponent implements AfterViewInit {
     ngAfterViewInit() {}
 
     onPhotoClick(photoID: string) {
-        this.photosService.activePhoto$.next(photoID)
+        this.photosService.activePhotoID$.next(photoID)
     }
 }
