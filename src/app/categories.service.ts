@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Subject, BehaviorSubject } from "rxjs"
+import { of, combineLatest, Subject, BehaviorSubject } from "rxjs"
 import { scan, map, startWith } from "rxjs/operators"
 import { flatten } from "ramda"
 
 type Category = {
     name: string;
     id: string;
+    new?: boolean;
 }
 
-const newCategoryFromName = (name: string) => ({ name, id: name, local: true })
+const newCategoryFromName = (name: string) => ({ name, id: name, new: true })
 
 @Injectable({
     providedIn: 'root'
@@ -19,11 +20,8 @@ export class CategoriesService {
         { name: "Public", id: "pub", },
     ]
 
-    categories$ = new BehaviorSubject(this.initialCategories)
-
     newCategory$: Subject<string> = new Subject()
-
-    activeCategory = new BehaviorSubject(this.initialCategories[0].id)
+    activeCategory$ = new BehaviorSubject(this.initialCategories[0].id)
 
     private newCategories$ = this.newCategory$.pipe(
         scan((categories, name: string) =>
@@ -31,17 +29,7 @@ export class CategoriesService {
         startWith([]),
     )
 
-    public getCategories$() {
-        return combineLatest(this.categories$, this.newCategories$).pipe(
-            map((collection: Array<Array<Category>>) => flatten(collection)),
-        )
-    }
-
-    public getActiveCategory() {
-        return this.activeCategory
-    }
-
-    public setActiveCategoryByID(categoryID: string) {
-        this.activeCategory.next(categoryID)
-    }
+    categories$ = combineLatest(of(this.initialCategories), this.newCategories$).pipe(
+        map((collection: Array<Array<Category>>) => flatten(collection)),
+    )
 }

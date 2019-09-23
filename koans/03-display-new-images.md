@@ -13,7 +13,7 @@ photos$ = combineLatest(
 )
 ```
 
-Function `of` takes one argument and return Observable that will produce this argument as its value. It makes it easier for us to combine existing photos wih new ones.
+Function `of` takes one argument and return Observable that will produce this argument as its value. It makes it easier for us to combine existing photos wih new ones. If we deal with Observables everywhere it's simple to combine them, without much thinking.
 
 Because `newPhotos$` changes everytime user uploads some photo, we have to accumulate all uploads into one array. We'll do it in `allNewPhotos$` Observable, with operator `scan`.
 
