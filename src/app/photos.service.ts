@@ -58,7 +58,7 @@ export class PhotosService {
         of(this.photos),
         this.allNewPhotos$,
     ).pipe(
-        map(flatten),
+        map((collection: Array<Array<Photo>>) => flatten(collection)),
     )
 
     noPhotoID = ""
