@@ -35,7 +35,7 @@ export class UploadPhotoComponent {
         )
 
         uploadedImages$.subscribe(
-            photos => this.photosService.newPhotos$.next(photos)
+            photos => this.photosService.newPhotos$.next(photos),
         )
     }
 }

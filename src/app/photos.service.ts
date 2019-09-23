@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of, combineLatest, Subject, BehaviorSubject, Observable } from 'rxjs';
-import { map } from "rxjs/operators"
-import { merge } from "ramda"
+import { scan, map, startWith, withLatestFrom, share } from "rxjs/operators"
+import { flatten, merge } from "ramda"
 import { Photo } from "./photo"
 
 const initialPhotos: Photo[] = [
@@ -46,27 +46,32 @@ const initialPhotos: Photo[] = [
     providedIn: 'root'
 })
 export class PhotosService {
-    constructor() {
-        this.newPhotos$.subscribe(photos => this.addPhotos(photos))
-    }
-
     private photos: Photo[] = initialPhotos
 
     newPhotos$ = new Subject()
-    addPhotos(photos) {
-        this.photos.push(...photos);
-    }
+    allNewPhotos$ = this.newPhotos$.pipe(
+        scan((allPhotos, newPhotos) => allPhotos.concat(newPhotos), []),
+        startWith([]),
+    )
+
+    photos$ = combineLatest(
+        of(this.photos),
+        this.allNewPhotos$,
+    ).pipe(
+        map(collection => flatten(collection)),
+    )
 
     noPhotoID = ""
     activePhotoID$ = new BehaviorSubject(this.noPhotoID)
 
-    findPhotoByID = (photoID: string) => this.photos.find(({ id }) => id === photoID)
+    findPhotoByID = (photos: Photo[], photoID: string) =>
+        photos.find(({ id }) => id === photoID)
 
     activePhoto$: Observable<Photo> = this.activePhotoID$.pipe(
-        map(this.findPhotoByID)
+        withLatestFrom(this.photos$),
+        map(([photoID, photos]) => {
+            const photo = this.findPhotoByID(photos, photoID)
+            return photo
+        }),
     )
-
-    getPhotosList(): Photo[] {
-        return this.photos
-    }
 }
