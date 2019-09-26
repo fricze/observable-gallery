@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { of, combineLatest, Subject, BehaviorSubject, Observable } from 'rxjs';
+import { of, combineLatest, Subject, BehaviorSubject, Observable, identity } from 'rxjs';
 import { scan, map, startWith, withLatestFrom, share } from "rxjs/operators"
-import { flatten, merge } from "ramda"
+import { flatten, map as Rmap } from "ramda"
 import { Photo } from "./photo"
+import filter from 'ramda/es/filter';
+import propEq from 'ramda/es/propEq';
+import { CategoriesService } from "./categories.service"
+import assoc from 'ramda/es/assoc';
 
 const initialPhotos: Photo[] = [
     {
@@ -53,12 +57,26 @@ const initialPhotos: Photo[] = [
     providedIn: 'root'
 })
 export class PhotosService {
+    constructor(
+        private categoriesService: CategoriesService,
+    ) { }
+
     private photos: Photo[] = initialPhotos
 
     newPhotos$ = new Subject()
 
-    private allNewPhotos$ = this.newPhotos$.pipe(
-        scan((allPhotos, newPhotos) => allPhotos.concat(newPhotos), []),
+    setActiveCategoryID = ([newPhotos, categoryID]: [Photo[], string]): Photo[] =>
+        Rmap(
+            assoc("categoryID", categoryID),
+            newPhotos
+        )
+
+    private allNewPhotos$ = combineLatest(
+        this.newPhotos$,
+        this.categoriesService.activeCategory$,
+    ).pipe(
+        map(this.setActiveCategoryID),
+        scan((allNewPhotos, newPhotos) => allNewPhotos.concat(newPhotos), []),
         startWith([]),
     )
 
@@ -82,4 +100,15 @@ export class PhotosService {
             return photo
         }),
     )
+
+    activeCategoryPhotos$ = combineLatest(
+        this.categoriesService.activeCategory$,
+        this.photos$,
+    ).pipe(
+        map(([categoryID, photos]) => filter(
+            propEq("categoryID", categoryID),
+            photos
+        ))
+    )
+
 }

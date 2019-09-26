@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
     styleUrls: ['./gallery.component.scss']
 })
 export class GalleryComponent {
-    photosList$: Observable<Photo[]> = this.photosService.photos$;
+    photosList$: Observable<Photo[]> = this.photosService.activeCategoryPhotos$;
 
     constructor(
         private photosService: PhotosService,
