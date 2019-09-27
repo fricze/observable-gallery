@@ -6,9 +6,9 @@ Today we’ll dig deeper into managing user and server interaction. With Rx.js y
 # Photo gallery
 We’re starting with simple photo gallery. To create it we need one service and two components. 
 
-Photos service will start with one field: `photos`. It's an array with a bunch of example photos. First we're gonna use it to display our gallery. Later we'll, gradually, add Observables and interactvity, based on this array with photos.
+Photos service will start with one field: `photos`. It's an array with a bunch of example photos. First we're going to use it to display our gallery. Later, we'll gradually add Observables and interactvity, based on this array with photos.
 
-Our Photo interface looks like that:
+Our Photo interface looks like this:
 
 ```typescript
 export interface Photo {
@@ -19,7 +19,7 @@ export interface Photo {
 }
 ```
 
-so `photos` in Photos service has type `Photo[]`. Gallery component refers photos list
+so `photos` in Photos service has type `Photo[]`. Gallery component refers to the list of photos
 
 ```typescript
 photosList: Photo[] = this.photosService.photos;
@@ -35,7 +35,7 @@ and displays it using `*ngFor*`
 </div>
 ```
 
-As you see there's one component left to implement. `app-photo` that displays single photo. In component code we declare one `Input`
+As you see there's one component left to implement. `app-photo` which displays an individual photo. In the component code we declare one `Input`
 
 ```typescript
 @Input() photo: { description: string; };
@@ -58,7 +58,7 @@ noPhotoID = ""
 activePhotoID$ = new BehaviorSubject(this.noPhotoID)
 ```
 
-As you see, BehaviorSubject constructor takes one argument – initial value. When we start to subscribe to activePhoto$ it will give us this value and, later, every next that comes to it. Our first value is empty string, since there’s no active photo when application starts.
+Notice the BehaviorSubject constructor takes one argument – initial value. When we start to subscribe to `activePhoto$` it will give us this value and, later, every next that comes to it. Our first value is empty string, since there’s no active photo when application starts.
 
 Let’s now go to our gallery and change value of activePhotoID$ every time user clicks on photo.
 
@@ -66,7 +66,7 @@ Let’s now go to our gallery and change value of activePhotoID$ every time user
 <img (click)="onPhotoClick(photo.id)" [src]="photo.url">
 ```
 
-We already know what’s going on here. Once user clicks on photo, we’re going to call the `onPhotoClick` method with one argument: photo.id. How do we implement `onPhotoClick` to make sure it sends value to activePhotoID$? We can do so like this:
+We already know what’s going on here. Once user clicks on a photo, we’re going to call the `onPhotoClick` method with one argument: `photo.id`. How do we implement `onPhotoClick` to make sure it sends value to `activePhotoID$`? We can do so like this:
 
 ```typescript
 onPhotoClick(photoID: string) {
@@ -74,7 +74,7 @@ onPhotoClick(photoID: string) {
 }
 ```
 
-Just refer the `activePhotoID$` and call `next` on it! Great! You’ve just connected user event with `Observable`. Now you can subscribe to it and display active photo.
+Just refer the `activePhotoID$` and call `next` on it! You’ve just connected user event with `Observable`. Great job! Now you can subscribe to it and display active photo.
 
 # Creating new value from Observable
 To display active photo let’s create a new component called (you guessed it) `active-photo`. It will access a photo that is currently active and display it.
@@ -87,9 +87,13 @@ activePhoto$: Observable<Photo> = this.activePhotoID$.pipe(
 )
 ```
 
-Only three lines of code and we’re done! Let’s break down what happens in activePhoto$.
+Only three lines of code and we’re done! This may look complicated, so let's break down what happens in `activePhoto$` and walk through the steps together.
 
-First: we’re accessing current active photo ID. Second: we’re using `pipe` method to transform it into something new. That’s what `pipe` does. It takes value from Observable and pipes it through Rx.js operators that create new Observables. Our first `pipe` takes photo ID and maps it to Photo object. Third: we take array of photos and return one Photo whose `id` equals `photoID`. Function `propEq` says exactly that: check if property named `id` equals variable `photoID`.
+First: we’re accessing current active photo ID. 
+
+Second: we’re using `pipe` method to transform it into something new. That’s what `pipe` does. Think of it like a coffee grinder- you put coffee in and get coffee out, but shaped just a little bit differently. It takes value from Observable and pipes it through Rx.js operators that create new Observables. Our first `pipe` takes photo ID and maps it to Photo object. 
+
+Third: we take array of photos and return one Photo whose `id` equals `photoID`. Function `propEq` says exactly that: check if property named `id` equals variable `photoID`.
 
 Let’s break this process down even further. Let’s extract a method that takes photo ID and returns Photo. It looks like this:
 
@@ -106,7 +110,7 @@ activePhoto$: Observable<Photo> = this.activePhotoID$.pipe(
 )
 ```
 
-Take active photo ID, pipe it through `map` operator and return new Observable that finds photo based on ID.
+Take the active photo ID, pipe it through `map` operator and return new Observable that finds photo based on ID.
 
 Go on and use `activePhoto$` Observable to display photo that user wanted to see!
 
@@ -123,14 +127,14 @@ activePhoto$: Observable<Photo> = this.photosService.activePhoto$;
 </div>
 ```
 
-And we have it with a couple lines of code! You assign `activePhoto$` from Photos service to Component field, so we can access `activePhoto$` value in HTML. Because we access asynchronous value that changes over time we use `async` pipe. Now Angular knows it should subscribe to asynchronous value and use new value every time it changes. Last part `?.url` means: check if `activePhoto$` holds a value, if it does access `url` field from it and display in HTML. Whew! We did it!
+And we have it with a couple lines of code! You assign `activePhoto$` from Photos service to Component field, so we can access `activePhoto$` value in HTML. Because we access asynchronous value that changes over time, we need to use the `async` pipe. The `async` pipe tells Angular it should subscribe to the asynchronous value and use new value every time it changes. Last part `?.url` means: check if `activePhoto$` holds a value, if it does access `url` field from it and display in HTML. Whew! We did it!
 
 ## Hiding active photo
-Last thing to do is hiding photo! It's nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
+Last thing to do is hiding the photo! It's nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
 
 To hide active photo we need to put empty ID on `activePhotoID$` `BehaviorSubject`. This way Photos service will know to send our components `undefined` value through `activePhoto$` Observable and no photo will be displayed.
 
-Ok, first let's add `hidePhoto` handler to HTML element, like that:
+Ok, first let's add `hidePhoto` handler to HTML element, like this:
 
 ```html
 <div
@@ -142,7 +146,7 @@ Ok, first let's add `hidePhoto` handler to HTML element, like that:
 </div>
 ```
 
-Active photo is now ready to receive user clicks. Now we go to Component and implement our handler.
+The active photo is now ready to receive user clicks. Now we go to Component and implement our handler.
 
 ```typescript
 hidePhoto() {
@@ -150,4 +154,4 @@ hidePhoto() {
 }
 ```
 
-Looks almost like setting active Photo ID, we've done in Photo Component. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let's try adding some photos!
+It looks almost like the code use used in the Photo Compoment to set active Photo ID. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let's try adding some photos!
