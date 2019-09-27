@@ -9,21 +9,19 @@ import { Photo } from "../photo"
     styleUrls: ['./active-photo.component.scss']
 })
 export class ActivePhotoComponent implements OnDestroy {
-    photo: Photo
-    photoSubscription: Subscription
+    private photo: Photo
 
-    constructor(
-        private photosService: PhotosService,
-    ) {
-        const subscription = this.photosService.activePhoto$.subscribe(photo => {
+    photoSubscription: Subscription =
+        this.photosService.activePhoto$.subscribe(photo => {
             this.photo = photo
         })
 
-        this.photoSubscription = subscription
-    }
+    constructor(
+        private photosService: PhotosService,
+    ) { }
 
     hidePhoto() {
-        this.photosService.activePhotoID$.next("-1");
+        this.photosService.activePhotoID$.next(this.photosService.noPhotoID);
     }
 
     ngOnDestroy() {

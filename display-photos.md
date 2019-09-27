@@ -1,12 +1,7 @@
-Hi there! If you’re reading this I know you’ve already built some web applications and it went pretty well! You know how to store and display data. You know how to react to user events and communicate with servers. Even styling your applications gets easier every time you do it!
-
-Today we’ll dig deeper into managing user and server interaction. With Rx.js you’ll take control of time in your application. You’ll create `Observables` to easily merge, filter, and synchronize events happening in your application. Let’s go!
-
-
 # Photo gallery
 We’re starting with simple photo gallery. To create it we need one service and two components. 
 
-Photos service will start with one field: `photos`. It's an array with a bunch of example photos. First we're gonna use it to display our gallery. Later we'll, gradually, add Observables and interactvity, based on this array with photos.
+Photos service will start with one field: `photos`. It’s an array with a bunch of example photos. First we’re gonna use it to display our gallery. Later we’ll, gradually, add Observables and interactvity, based on this array with photos.
 
 Our Photo interface looks like that:
 
@@ -35,7 +30,7 @@ and displays it using `*ngFor*`
 </div>
 ```
 
-As you see there's one component left to implement. `app-photo` that displays single photo. In component code we declare one `Input`
+As you see there’s one component left to implement. `app-photo` that displays single photo. In component code we declare one `Input`
 
 ```typescript
 @Input() photo: { description: string; };
@@ -126,11 +121,11 @@ activePhoto$: Observable<Photo> = this.photosService.activePhoto$;
 And we have it with a couple lines of code! You assign `activePhoto$` from Photos service to Component field, so we can access `activePhoto$` value in HTML. Because we access asynchronous value that changes over time we use `async` pipe. Now Angular knows it should subscribe to asynchronous value and use new value every time it changes. Last part `?.url` means: check if `activePhoto$` holds a value, if it does access `url` field from it and display in HTML. Whew! We did it!
 
 ## Hiding active photo
-Last thing to do is hiding photo! It's nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
+Last thing to do is hiding photo! It’s nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
 
 To hide active photo we need to put empty ID on `activePhotoID$` `BehaviorSubject`. This way Photos service will know to send our components `undefined` value through `activePhoto$` Observable and no photo will be displayed.
 
-Ok, first let's add `hidePhoto` handler to HTML element, like that:
+Ok, first let’s add `hidePhoto` handler to HTML element, like that:
 
 ```html
 <div
@@ -150,4 +145,8 @@ hidePhoto() {
 }
 ```
 
-Looks almost like setting active Photo ID, we've done in Photo Component. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let's try adding some photos!
+Looks almost like setting active Photo ID, we’ve done in Photo Component. Only difference is, this time we’re sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let’s try adding some photos!
+
+{% hint style="success" %}
+[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_01_display-photos)
+{% endhint %}
