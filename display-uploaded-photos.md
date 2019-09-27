@@ -54,7 +54,7 @@ or even, a one liner:
 photos$ = combineLatest(of(this.photos), this.allNewPhotos$).pipe(map(flatten))
 ```
 
-Take all arrays that are sent from two Observables and flatten them all into one. I have to say, it's quite elegant!
+Take all arrays that are sent from two Observables and flatten them all into one. I have to say, it’s quite elegant!
 
 And what do we have to do, to display these new photos on our photos list? Just two little changes in our Gallery component.
 
@@ -74,7 +74,7 @@ Great! We’re uploading photos to gallery, displaying all of them and opening a
 
 ## Control your subscriptions
 
-Why does it happen? Let's have a look at `active-photo.component.html`. 
+Why does it happen? Let’s have a look at `active-photo.component.html`. 
 
 ```html
 <div
@@ -87,9 +87,9 @@ Why does it happen? Let's have a look at `active-photo.component.html`.
 
 ```
 
-We're using `async` pipe twice in our template. What `async` pipe does is: it creates Subscription and displays data in HTML. Subscription is an object that listens to Observable changes. So in the template we have one data source `activePhoto$`, but two listeners: `… | async`. It's a mess. We want to have one Subscription for one data source. Otherwise data in our Component is desynchronized.
+We’re using `async` pipe twice in our template. What `async` pipe does is: it creates Subscription and displays data in HTML. Subscription is an object that listens to Observable changes. So in the template we have one data source `activePhoto$`, but two listeners: `… | async`. It’s a mess. We want to have one Subscription for one data source. Otherwise data in our Component is desynchronized.
 
-Ok then. How can we minimze amount of Subscriptions? We'll go into `ActivePhotoComponent` and create one Subscription there. This Subscription will feed data to our template, so template will always get proper data.
+Ok then. How can we minimze amount of Subscriptions? We’ll go into `ActivePhotoComponent` and create one Subscription there. This Subscription will feed data to our template, so template will always get proper data.
 
 ```typescript
 photo: Photo
@@ -111,14 +111,10 @@ Not a lot of code, reads quite straightforward. Subscribe to Observable and each
 ```
 
 ## Cleaning after yourself
-Everything should work nicely by now. But beacause we've started to create our own Subscriptions we have to remember to clean them, when Component is destroyed. Otherwise Subscription will go on forever and bloat application memory. Let's use `ngOnDestroy` for that. Access `photoSubscription` and tell it, that it should stop listening for any changes. Your work here is done `photoSubscription`, you may now rest peacefully.
+Everything should work nicely by now. But beacause we’ve started to create our own Subscriptions we have to remember to clean them, when Component is destroyed. Otherwise Subscription will go on forever and bloat application memory. Let’s use `ngOnDestroy` for that. Access `photoSubscription` and tell it, that it should stop listening for any changes. Your work here is done `photoSubscription`, you may now rest peacefully.
 
 ```
 ngOnDestroy() {
     this.photoSubscription.unsubscribe()
 }
 ```
-
-<!-- It’s so nice, it’d be a crime not to add some more features! -->
-
-

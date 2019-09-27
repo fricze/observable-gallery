@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { of, combineLatest, Subject, BehaviorSubject } from "rxjs"
 import { scan, map, startWith } from "rxjs/operators"
-import { flatten } from "ramda"
+import flatten from "ramda/es/flatten"
 import uuid from "uuidv4"
 
 type Category = {
@@ -12,8 +12,9 @@ type Category = {
 const newCategoryFromName = (name: string) => ({ name, id: uuid(), })
 
 const initialCategories = [
-    { name: "Private", id: "46004df1-876a-443c-9126-4bee714bed9e", },
-    { name: "Public", id: "4cc5e97c-7572-481a-969d-e92b131a2e8d", },
+    { name: "Landscapes", id: "46004df1-876a-443c-9126-4bee714bed9e", },
+    { name: "Wishlist", id: "4cc5e97c-7572-481a-969d-e92b131a2e8d", },
+    { name: "Others", id: "b22a7c97-d7da-4fa7-af75-170055a9f825", },
 ]
 
 @Injectable({
