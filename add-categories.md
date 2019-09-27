@@ -138,5 +138,5 @@ mergeCategories = map(([categories, newCategories, activeCategoryID]) =>
 Now it flattens `categories` and `newCategories` into one array, but also adds new field `active` to each of them so we can use it in HTML template to add some class, like `active-category` and mark this category with CSS. We have photos, we have categories, we have created few Observables! Time to celebrate and add more features!
 
 {% hint style="success" %}
-[See the results on StackBlitz](https://stackblitz.com/github/jonki/todo-list-tutorial/tree/master/examples/3_04-categories/)
+[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_04-categories/)
 {% endhint %}
