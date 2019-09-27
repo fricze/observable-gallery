@@ -13,7 +13,7 @@ private allNewPhotos$ = this.newPhotos$.pipe(
 )
 ```
 
-We want to combine it, somehow, with `activeCategory$` Observable from Categories Service and make sure each, new uploaded, photo gets property `categoryID` with ID of currently active category. First, let’s see how `allNewPhotos$` should look.
+We want to combine it with `activeCategory$` from Categories Service and make sure each, new uploaded, photo gets property `categoryID` with ID of currently active category. First, let’s see how `allNewPhotos$` should look.
 
 ```typescript
 private allNewPhotos$ = this.newPhotos$.pipe(
