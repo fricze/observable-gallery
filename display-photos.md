@@ -151,5 +151,5 @@ hidePhoto() {
 It looks almost like the code use used in the Photo Compoment to set active Photo ID. Only difference is, this time we’re sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let’s try adding some photos!
 
 {% hint style="success" %}
-[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_01_display-photos)
+[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_01-display-photos)
 {% endhint %}

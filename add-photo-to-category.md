@@ -32,3 +32,7 @@ setCategoryID = ([newPhotos, categoryID]): Photo[] =>
 ```
 
 This method takes uploaded photos and categoryID and writes `categoryID` to every photo that is currently being uploaded. Have a go! Try to upload photos, change categories and make sure everything works like we want it.
+
+{% hint style="success" %}
+[See the results on StackBlitz](https://stackblitz.com/github/jonki/todo-list-tutorial/tree/master/examples/3_05-add-photo-to-category/)
+{% endhint %}

@@ -68,5 +68,5 @@ Now, we’re going to use RxJS function `forkJoin` to create `uploadedImages$`. 
 And what should happen when we read all images? Take list of sources and merge it with list of images. When data is ready, send it to Photos service via `newPhotos$` Subject.
 
 {% hint style="success" %}
-[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_02_upload-photos)
+[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_02-upload-photos)
 {% endhint %}
