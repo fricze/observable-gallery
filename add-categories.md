@@ -1,7 +1,7 @@
 # Add categories
 Wow! That was a nice ride! What now? Is our gallery finished? Of course not. Once you upload more and more photos you’d probably want to create some categories or tags. If we’d mix dogs memes with memories from our last pizzeria visit, the gallery would make no sense. Let’s go and some categories.
 
-First? Maybe some `categories` component?
+First? Maybe some `Categories` component?
 
 ```html
 <div class="categories">
@@ -32,9 +32,9 @@ Not to bore you, but it’s almost the same stuff we’ve done in photos service
 
 # Filtering photos 
 
-In Categories Service, we’ll have some initial categories with names and unique IDs for our photos (you may create your own!)
+In Categories Service, we’ll have some initial categories with names and unique IDs for our photos (you may use your own names!)
 
-```
+```typescript
 const initialCategories = [
     { name: "Landscapes", id: "46004df1-876a-443c-9126-4bee714bed9e", },
     { name: "Wishlist", id: "4cc5e97c-7572-481a-969d-e92b131a2e8d", },
@@ -42,4 +42,4 @@ const initialCategories = [
 ]
 ```
 
-In Photos Service, we have to add `categoryID` field to our photos and put there proper IDs. This way we can easily group photos by category.
+In Photos Service, we have to add `categoryID` field to our photos and put proper IDs there. This way we can easily group photos by category.
