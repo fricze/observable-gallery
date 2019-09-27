@@ -1,12 +1,11 @@
 # Merging Observables
-*Merge new images with existing images*
-Wow, how far we came! We can use Observables to handle user events, but also to synchronize data processing events. Isn’t it beautiful, when you have API that's simple but powerful enough to be useful in many situations? You may have started to discover that Rx.js is powerful not only because it provides us with Observables and operators but, also, because it give us very nice language to speak about asynchronous events. It has answers for most of your asynchronous problems.
+Wow, how far we came! We can use Observables to handle user events, but also to synchronize data processing events. Isn’t it beautiful? You have API that's concise but powerful enough to be useful in many situations? You may have started discovering that Rx.js is powerful not only because it provides us with Observables and many operators but, also, because it give us very nice language to speak about asynchronous events. It has answers for most of your asynchronous problems.
 
 So what do we do now? Let’s think what we have in Photos service? List of photos and Observable with new photos, uploaded by user. That’d be great if we could just merge them. Take one list, take second list, put them together and update every time there are new photos coming. Sound reasonable? I think it does, so I’ll do it. You can follow me and we'll do it together!
 
 First, let's create new Observable. It'll be the one that merges existing photos with new ones. We'll use `combineLatest` function. It does what it says – takes latest value from each Observable it's given and combine them together. `combineLatest` produces new value everytime once of it's arguments produces a value. Then all values are combined into array and passed to next Observable. 
 
-```
+```typescript
 photos$ = combineLatest(
     of(this.photos),
     this.allNewPhotos$,
@@ -17,7 +16,7 @@ Function `of` takes one argument and return Observable that will produce this ar
 
 Because `newPhotos$` changes everytime user uploads some photo, we have to accumulate all uploads into one array. We'll do it in `allNewPhotos$` Observable, with operator `scan`.
 
-```
+```typescript
 allNewPhotos$ = this.newPhotos$.pipe(
      scan((allPhotos, newPhotos) => allPhotos.concat(newPhotos), []),
      startWith([]),
@@ -28,7 +27,7 @@ allNewPhotos$ = this.newPhotos$.pipe(
 
 Last one thing! We've combined existing photos with new photos. We've accumulated photos uploaded over time into one, huge list of all uploaded photos. But we have to tell our new `photos$` Observable how to exactly combine those two. It goes like this:
 
-```
+```typescript
 photos$ = combineLatest(
      of(this.photos),
      this.allNewPhotos$,
@@ -39,7 +38,7 @@ photos$ = combineLatest(
 
 After `combineLatest` produces new array with existing and uploaded photos, let's take these two arrays, put them into one and flatten. That way we're getting one array with all photos. If you'd like to make this code a bit shorter, you could do something like:
 
-```
+```typescript
 photos$ = combineLatest(
      of(this.photos),
      this.allNewPhotos$,
@@ -51,7 +50,7 @@ photos$ = combineLatest(
 or even, a one liner:
 
 
-```
+```typescript
 photos$ = combineLatest(of(this.photos), this.allNewPhotos$).pipe(map(flatten))
 ```
 
@@ -61,13 +60,13 @@ And what do we have to do, to display these new photos on our photos list? Just 
 
 First we change photosList to `photosList$`:
 
-```
+```typescript
 photosList$: Observable<Photo[]> = this.photosService.photos$;
 ```
 
 and we make sure that HTML knows our list is now Observable
 
-```
+```html
 <div *ngFor="let photo of photosList$ | async" class="photo">…
 ```
 

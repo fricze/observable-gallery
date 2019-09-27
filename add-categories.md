@@ -3,7 +3,7 @@ Wow! That was a nice ride! What now? Is our gallery finished? Of course not. Onc
 
 First? Maybe some `categories` component?
 
-```
+```html
 <div class="categories">
     <div *ngFor="let category of categoriesList$ | async"
          [ngClass]="{'category': true, 'category-new': category.new}"
@@ -19,7 +19,7 @@ First? Maybe some `categories` component?
 
 So that's how it is. We've already seen some Observables and events handlers so surely you can read this code and get the general idea. Some looping over Observable with categories. CSS class for new categories. Setting active category once user clicks on it. `ngModel` on our input will help us clear it when new category is created. Let's see `addNewCategory` handler.
 
-```
+```typescript
 addNewCategory(name: string) {
     this.categoriesService.newCategory$.next(name)
     this.newCategoryName = ""

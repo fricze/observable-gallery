@@ -57,6 +57,8 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
+    <link rel="next" href="add-categories.html" />
+    
     
     <link rel="prev" href="upload-photos.html" />
     
@@ -139,6 +141,19 @@
             
         </li>
     
+        <li class="chapter " data-level="1.5" data-path="add-categories.html">
+            
+                <a href="add-categories.html">
+            
+                    
+                    #4: Filtering data. Add categories
+            
+                </a>
+            
+
+            
+        </li>
+    
 
     
 
@@ -185,44 +200,50 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="merging-observables">Merging Observables</h1>
-<p><em>Merge new images with existing images</em>
-Wow, how far we came! We can use Observables to handle user events, but also to synchronize data processing events. Isn&#x2019;t it beautiful, when you have API that&apos;s simple but powerful enough to be useful in many situations? You may have started to discover that Rx.js is powerful not only because it provides us with Observables and operators but, also, because it give us very nice language to speak about asynchronous events. It has answers for most of your asynchronous problems.</p>
+<p>Wow, how far we came! We can use Observables to handle user events, but also to synchronize data processing events. Isn&#x2019;t it beautiful? You have API that&apos;s concise but powerful enough to be useful in many situations? You may have started discovering that Rx.js is powerful not only because it provides us with Observables and many operators but, also, because it give us very nice language to speak about asynchronous events. It has answers for most of your asynchronous problems.</p>
 <p>So what do we do now? Let&#x2019;s think what we have in Photos service? List of photos and Observable with new photos, uploaded by user. That&#x2019;d be great if we could just merge them. Take one list, take second list, put them together and update every time there are new photos coming. Sound reasonable? I think it does, so I&#x2019;ll do it. You can follow me and we&apos;ll do it together!</p>
 <p>First, let&apos;s create new Observable. It&apos;ll be the one that merges existing photos with new ones. We&apos;ll use <code>combineLatest</code> function. It does what it says &#x2013; takes latest value from each Observable it&apos;s given and combine them together. <code>combineLatest</code> produces new value everytime once of it&apos;s arguments produces a value. Then all values are combined into array and passed to next Observable. </p>
-<pre><code>photos$ = combineLatest(
-    of(this.photos),
-    this.allNewPhotos$,
+<pre><code class="lang-typescript">photos$ = combineLatest(
+    of(<span class="hljs-keyword">this</span>.photos),
+    <span class="hljs-keyword">this</span>.allNewPhotos$,
 )
-</code></pre><p>Function <code>of</code> takes one argument and return Observable that will produce this argument as its value. It makes it easier for us to combine existing photos wih new ones. If we deal with Observables everywhere it&apos;s simple to combine them, without much thinking.</p>
+</code></pre>
+<p>Function <code>of</code> takes one argument and return Observable that will produce this argument as its value. It makes it easier for us to combine existing photos wih new ones. If we deal with Observables everywhere it&apos;s simple to combine them, without much thinking.</p>
 <p>Because <code>newPhotos$</code> changes everytime user uploads some photo, we have to accumulate all uploads into one array. We&apos;ll do it in <code>allNewPhotos$</code> Observable, with operator <code>scan</code>.</p>
-<pre><code>allNewPhotos$ = this.newPhotos$.pipe(
+<pre><code class="lang-typescript">allNewPhotos$ = <span class="hljs-keyword">this</span>.newPhotos$.pipe(
      scan((allPhotos, newPhotos) =&gt; allPhotos.concat(newPhotos), []),
      startWith([]),
 )
-</code></pre><p><code>scan</code> tells us: I&apos;m gonna take every value you give me and accumulate into one, aggregate value. Meaning&#x2026; what, when, why? Ok. You see <code>scan</code> think: huge, huge snowball. Everytime you add little snowball to it, it gets bigger, but it&apos;s the same, huge snowball. So <code>scan</code> takes many little snowballs as inputs and produces huge one as output. Our particular <code>scan</code>, instead of snow, takes lots of photos uploaded over time, and concatenates them into one, huge list of uploaded photos. There&apos;s also <code>startWith</code> to make sure that our <code>allNewPhotos$</code> Observable has starting value before <code>scan</code> produces anything.</p>
+</code></pre>
+<p><code>scan</code> tells us: I&apos;m gonna take every value you give me and accumulate into one, aggregate value. Meaning&#x2026; what, when, why? Ok. You see <code>scan</code> think: huge, huge snowball. Everytime you add little snowball to it, it gets bigger, but it&apos;s the same, huge snowball. So <code>scan</code> takes many little snowballs as inputs and produces huge one as output. Our particular <code>scan</code>, instead of snow, takes lots of photos uploaded over time, and concatenates them into one, huge list of uploaded photos. There&apos;s also <code>startWith</code> to make sure that our <code>allNewPhotos$</code> Observable has starting value before <code>scan</code> produces anything.</p>
 <p>Last one thing! We&apos;ve combined existing photos with new photos. We&apos;ve accumulated photos uploaded over time into one, huge list of all uploaded photos. But we have to tell our new <code>photos$</code> Observable how to exactly combine those two. It goes like this:</p>
-<pre><code>photos$ = combineLatest(
-     of(this.photos),
-     this.allNewPhotos$,
+<pre><code class="lang-typescript">photos$ = combineLatest(
+     of(<span class="hljs-keyword">this</span>.photos),
+     <span class="hljs-keyword">this</span>.allNewPhotos$,
 ).pipe(
      map(([photos, uploadedPhotos]) =&gt; flatten([photos, uploadedPhotos])),
 )
-</code></pre><p>After <code>combineLatest</code> produces new array with existing and uploaded photos, let&apos;s take these two arrays, put them into one and flatten. That way we&apos;re getting one array with all photos. If you&apos;d like to make this code a bit shorter, you could do something like:</p>
-<pre><code>photos$ = combineLatest(
-     of(this.photos),
-     this.allNewPhotos$,
+</code></pre>
+<p>After <code>combineLatest</code> produces new array with existing and uploaded photos, let&apos;s take these two arrays, put them into one and flatten. That way we&apos;re getting one array with all photos. If you&apos;d like to make this code a bit shorter, you could do something like:</p>
+<pre><code class="lang-typescript">photos$ = combineLatest(
+     of(<span class="hljs-keyword">this</span>.photos),
+     <span class="hljs-keyword">this</span>.allNewPhotos$,
 ).pipe(
-     map((collection: Array&lt;Array&lt;Photo&gt;&gt;) =&gt; flatten(collection)),
+     map((collection: <span class="hljs-built_in">Array</span>&lt;<span class="hljs-built_in">Array</span>&lt;Photo&gt;&gt;) =&gt; flatten(collection)),
 )
-</code></pre><p>or even, a one liner:</p>
-<pre><code>photos$ = combineLatest(of(this.photos), this.allNewPhotos$).pipe(map(flatten))
-</code></pre><p>Take all arrays that are sent here and flatten them all into one. So elegant!</p>
+</code></pre>
+<p>or even, a one liner:</p>
+<pre><code class="lang-typescript">photos$ = combineLatest(of(<span class="hljs-keyword">this</span>.photos), <span class="hljs-keyword">this</span>.allNewPhotos$).pipe(map(flatten))
+</code></pre>
+<p>Take all arrays that are sent here and flatten them all into one. So elegant!</p>
 <p>And what do we have to do, to display these new photos on our photos list? Just one real change in our <code>gallery</code> component.</p>
 <p>First we change photosList to <code>photosList$</code>:</p>
-<pre><code>photosList$: Observable&lt;Photo[]&gt; = this.photosService.photos$;
-</code></pre><p>and we make sure that HTML knows our list is now Observable</p>
-<pre><code>&lt;div *ngFor=&quot;let photo of photosList$ | async&quot; class=&quot;photo&quot;&gt;&#x2026;
-</code></pre><p>Great! We&apos;re uploading photos to gallery, displaying all of them and opening active photo still works like it did. It&apos;s so nice, it&apos;d be a crime not to add some more features!</p>
+<pre><code class="lang-typescript">photosList$: Observable&lt;Photo[]&gt; = <span class="hljs-keyword">this</span>.photosService.photos$;
+</code></pre>
+<p>and we make sure that HTML knows our list is now Observable</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> *<span class="hljs-attr">ngFor</span>=<span class="hljs-string">&quot;let photo of photosList$ | async&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;photo&quot;</span>&gt;</span>&#x2026;
+</code></pre>
+<p>Great! We&apos;re uploading photos to gallery, displaying all of them and opening active photo still works like it did. It&apos;s so nice, it&apos;d be a crime not to add some more features!</p>
 
                                 
                                 </section>
@@ -250,10 +271,14 @@ Wow, how far we came! We can use Observables to handle user events, but also to 
 
             
                 
-                <a href="upload-photos.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: #2: More interaction! Upload photos">
+                <a href="upload-photos.html" class="navigation navigation-prev " aria-label="Previous page: #2: More interaction! Upload photos">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
+                
+                <a href="add-categories.html" class="navigation navigation-next " aria-label="Next page: #4: Filtering data. Add categories">
+                    <i class="fa fa-angle-right"></i>
+                </a>
                 
             
         
@@ -262,7 +287,7 @@ Wow, how far we came! We can use Observables to handle user events, but also to 
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"#3: Merging Observables. Display uploaded photos","level":"1.4","depth":1,"previous":{"title":"#2: More interaction! Upload photos","level":"1.3","depth":1,"path":"upload-photos.md","ref":"upload-photos.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"display-new-images.md","mtime":"2019-09-23T20:51:16.930Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-09-27T09:07:39.507Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"#3: Merging Observables. Display uploaded photos","level":"1.4","depth":1,"next":{"title":"#4: Filtering data. Add categories","level":"1.5","depth":1,"path":"add-categories.md","ref":"add-categories.md","articles":[]},"previous":{"title":"#2: More interaction! Upload photos","level":"1.3","depth":1,"path":"upload-photos.md","ref":"upload-photos.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"display-new-images.md","mtime":"2019-09-27T09:17:23.500Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-09-27T09:20:36.754Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
