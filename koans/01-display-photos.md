@@ -83,19 +83,19 @@ But, you probably thinking now, in our photos service, we only store the ID of t
 
 ```
 activePhoto$: Observable<Photo> = this.activePhotoID$.pipe(
-    map(photoID => this.photos.find(({ id }) => id === photoID))
+    map(photoID => this.photos.find(propEq("id", photoID))
 )
 ```
 
 Only three lines of code and we’re done! Let’s break down what happens in activePhoto$.
 
-First: we’re accessing current active photo ID. Second: we’re using `pipe` method to transform it into something new. That’s what `pipe` does. It takes value from Observable and pipes it through Rx.js operators that create new Observables. Our first `pipe` takes photo ID and maps it to Photo object.
+First: we’re accessing current active photo ID. Second: we’re using `pipe` method to transform it into something new. That’s what `pipe` does. It takes value from Observable and pipes it through Rx.js operators that create new Observables. Our first `pipe` takes photo ID and maps it to Photo object. Third: we take array of photos and return one Photo whose `id` equals `photoID`. Function `propEq` says exactly that: check if property named `id` equals variable `photoID`.
 
 Let’s break this process down even further. Let’s extract a method that takes photo ID and returns Photo. It looks like this:
 
 ```
-findPhotoByID = (photoID: string) =>
-this.photos.find(({ id }) => id === photoID)
+findPhotoByID = (photos: Photo[], photoID: string) =>
+    photos.find(propEq("id", photoID))
 ```
 
 We’re just finding one photo in array. Now, move it back to our `activePhoto$` Observable.
@@ -118,11 +118,36 @@ activePhoto$: Observable<Photo> = this.photosService.activePhoto$;
 ```
 
 ```
-<img [src]="(activePhoto$ | async)?.url">
+<div *ngIf="(activePhoto$ | async)" class="active-photo">
+    <img [src]="(activePhoto$ | async)?.url">
+</div>
 ```
 
 And we have it with a couple lines of code! You assign `activePhoto$` from Photos service to Component field, so we can access `activePhoto$` value in HTML. Because we access asynchronous value that changes over time we use `async` pipe. Now Angular knows it should subscribe to asynchronous value and use new value every time it changes. Last part `?.url` means: check if `activePhoto$` holds a value, if it does access `url` field from it and display in HTML. Whew! We did it!
 
-## Hide active photo
-Last thing to do is hiding photo… [WIP]
+## Hiding active photo
+Last thing to do is hiding photo! It's nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
 
+To hide active photo we need to put empty ID on `activePhotoID$` `BehaviorSubject`. This way Photos service will know to send our components `undefined` value through `activePhoto$` Observable and no photo will be displayed.
+
+Ok, first let's add `hidePhoto` handler to HTML element, like that:
+
+```
+<div
+    *ngIf="(activePhoto$ | async)"
+    class="active-photo"
+    (click)="hidePhoto()"
+>
+    <img [src]="(activePhoto$ | async)?.url">
+</div>
+```
+
+Active photo is now ready to receive user clicks. Now we go to Component and implement our handler.
+
+```
+hidePhoto() {
+    this.photosService.activePhotoID$.next(this.photosService.noPhotoID);
+}
+```
+
+Looks almost like setting active photo ID in Photo Component. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed!
