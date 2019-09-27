@@ -56,7 +56,7 @@ photos$ = combineLatest(of(this.photos), this.allNewPhotos$).pipe(map(flatten))
 
 Take all arrays that are sent here and flatten them all into one. So elegant!
 
-And what do we have to do, to display these new photos on our photos list? Just one real change in our `gallery` component.
+And what do we have to do, to display these new photos on our photos list? Just one real change in our Gallery component.
 
 First we change photosList to `photosList$`:
 
@@ -70,4 +70,10 @@ and we make sure that HTML knows our list is now Observable
 <div *ngFor="let photo of photosList$ | async" class="photo">…
 ```
 
-Great! We're uploading photos to gallery, displaying all of them and opening active photo still works like it did. It's so nice, it'd be a crime not to add some more features!
+Great! We're uploading photos to gallery, displaying all of them and opening active photo still works, like it did. Altough, if you've tried to click on newly uploaded photos, you've probably noticed, they don't zoom properly.
+
+## Control your subscriptions
+
+<!-- It's so nice, it'd be a crime not to add some more features! -->
+
+
