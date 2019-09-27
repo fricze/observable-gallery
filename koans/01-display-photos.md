@@ -150,4 +150,4 @@ hidePhoto() {
 }
 ```
 
-Looks almost like setting active photo ID in Photo Component. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed!
+Looks almost like setting active Photo ID, we've done in Photo Component. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let's try adding some photos!
