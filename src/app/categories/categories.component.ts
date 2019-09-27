@@ -8,19 +8,18 @@ import { Observable } from 'rxjs';
     styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent {
-    newCategoryName = ""
-
-    categoriesList$: Observable<{ name: string; }[]> =
-        this.categoriesService.categories$
-
     constructor(private categoriesService: CategoriesService) {}
 
-    addNewCategory(name: string) {
+    newCategoryName = ""
+
+    categoriesList$ = this.categoriesService.categories$
+
+    onAddNewCategory(name: string) {
         this.categoriesService.newCategory$.next(name)
         this.newCategoryName = ""
     }
 
-    setActiveCategory(categoryID: string) {
+    onCategoryClick(categoryID: string) {
         this.categoriesService.activeCategory$.next(categoryID)
     }
 }

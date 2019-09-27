@@ -14,6 +14,11 @@
     &:hover {
         color: #00baff;
     }
+
+    &.active-category {
+        font-style: italic;
+        color: #037098;
+    }
 }
 
 .new-category {
