@@ -12,15 +12,14 @@ export class CategoriesComponent {
 
     newCategoryName = ""
 
-    categoriesList$: Observable<{ name: string; }[]> =
-        this.categoriesService.categories$
+    categoriesList$ = this.categoriesService.categories$
 
-    addNewCategory(name: string) {
+    onAddNewCategory(name: string) {
         this.categoriesService.newCategory$.next(name)
         this.newCategoryName = ""
     }
 
-    setActiveCategory(categoryID: string) {
+    onCategoryClick(categoryID: string) {
         this.categoriesService.activeCategory$.next(categoryID)
     }
 }

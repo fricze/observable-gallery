@@ -2,12 +2,8 @@ import { Injectable } from '@angular/core';
 import { of, combineLatest, Subject, BehaviorSubject } from "rxjs"
 import { scan, map, startWith } from "rxjs/operators"
 import flatten from "ramda/es/flatten"
+import merge from 'ramda/es/merge';
 import uuid from "uuidv4"
-
-type Category = {
-    name: string;
-    id: string;
-}
 
 const newCategoryFromName = (name: string) => ({ name, id: uuid(), })
 
@@ -30,9 +26,14 @@ export class CategoriesService {
         startWith([]),
     )
 
+    mergeCategories = map(([categories, newCategories, activeCategoryID]) =>
+        flatten([categories, newCategories]).map(
+            category => merge(category, {
+                active: category.id === activeCategoryID
+            })
+        ))
+
     categories$ = combineLatest(
-        of(initialCategories), this.newCategories$
-    ).pipe(
-        map((collection: Array<Array<Category>>) => flatten(collection)),
-    )
+        of(initialCategories), this.newCategories$, this.activeCategory$
+    ).pipe(this.mergeCategories)
 }

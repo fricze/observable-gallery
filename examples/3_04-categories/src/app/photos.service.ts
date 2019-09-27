@@ -5,10 +5,7 @@ import { Photo } from "./photo"
 import propEq from 'ramda/es/propEq';
 import flatten from "ramda/es/flatten"
 import filter from 'ramda/es/filter';
-// Use rMap as alias for: ramda map, to differentiate from rx.js map
-import rMap from 'ramda/es/map';
 import { CategoriesService } from "./categories.service"
-import assoc from 'ramda/es/assoc';
 
 const initialPhotos: Photo[] = [
     {
@@ -67,17 +64,7 @@ export class PhotosService {
 
     newPhotos$ = new Subject()
 
-    setActiveCategoryInPhoto = ([newPhotos, categoryID]: [Photo[], string]): Photo[] =>
-        rMap(
-            assoc("categoryID", categoryID),
-            newPhotos
-        )
-
-    private allNewPhotos$ = combineLatest(
-        this.newPhotos$,
-        this.categoriesService.activeCategory$,
-    ).pipe(
-        map(this.setActiveCategoryInPhoto),
+    private allNewPhotos$ = this.newPhotos$.pipe(
         scan((allNewPhotos, newPhotos) => allNewPhotos.concat(newPhotos), []),
         startWith([]),
     )
@@ -100,13 +87,13 @@ export class PhotosService {
         map(([photoID, photos]) => this.findPhotoByID(photos, photoID)),
     )
 
+    filterPhotosByCategory = map(([categoryID, photos]) => filter(
+        propEq("categoryID", categoryID),
+        photos
+    ))
+
     activeCategoryPhotos$ = combineLatest(
         this.categoriesService.activeCategory$,
         this.photos$,
-    ).pipe(
-        map(([categoryID, photos]) => filter(
-            propEq("categoryID", categoryID),
-            photos
-        ))
-    )
+    ).pipe(this.filterPhotosByCategory)
 }
