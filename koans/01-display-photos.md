@@ -4,9 +4,51 @@ Today we’ll dig deeper into managing user and server interaction. With Rx.js y
 
 
 # Photo gallery
-We’re starting with simple photo gallery. To create it we need one service and two components. [WIP]
+We’re starting with simple photo gallery. To create it we need one service and two components. 
 
-# First Observable!
+Photos service will start with one field: `photos`. It's an array with a bunch of example photos. First we're gonna use it to display our gallery. Later we'll, gradually, add Observables and interactvity, based on this array with photos.
+
+Our Photo interface looks like that:
+
+```
+export interface Photo {
+    url: string;
+    description: string;
+    id: string;
+    categoryID?: string;
+}
+```
+
+so `photos` in Photos service has type `Photo[]`. Gallery component refers photos list
+
+```
+photosList: Photo[] = this.photosService.photos;
+```
+
+and displays it using `*ngFor*`
+
+```
+<div class="photos-list">
+    <div *ngFor="let photo of photosList" class="photo">
+        <app-photo [photo]="photo"></app-photo>
+    </div>
+</div>
+```
+
+As you see there's one component left to implement. `app-photo` that displays single photo. In component code we declare one `Input`
+
+```
+@Input() photo: { description: string; };
+```
+
+and use this data in HTML template
+
+```
+<img (click)="onPhotoClick(photo.id)" [src]="photo.url">
+```
+
+
+## First Observable!
 Our photo gallery looks great, but all photos are so small. Users will want to see bigger pictures. Let’s help them do so! When users click on photo we’ll create a nice overlay over our gallery and show the whole photo.
 
 To do it we have to track which photo is currently active. How do we do it? Of course, with help of Rx.js! It provides us with `BehaviorSubject` – object that holds value changing over time. Once we’ve had created BehaviorSubject that stores ID of active photo, we can display it easily.
@@ -68,7 +110,7 @@ Take active photo ID, pipe it through `map` operator and return new Observable t
 
 Go on and use `activePhoto$` Observable to display photo that user wanted to see!
 
-# Display active photo!
+## Display active photo!
 It gets more and more interesting! You created `BehaviorSubject` that keeps value changing over time. You’ve used it to create new Observable! Now you get to display data from it. It surely requires a lot of work, or does it…? Let’s look at the code.
 
 ```
