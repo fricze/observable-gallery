@@ -35,7 +35,7 @@ onPhotoClick(photoID: string) {
 Just refer the `activePhotoID$` and call `next` on it! Great! You’ve just connected user event with `Observable`. Now you can subscribe to it and display active photo.
 
 # Creating new value from Observable
-To display active photo let’s createa new component called (you guessed it) `active-photo`. It will access a photo that is currently active and display it.
+To display active photo let’s create a new component called (you guessed it) `active-photo`. It will access a photo that is currently active and display it.
 
 But, you probably thinking now, in our photos service, we only store the ID of the photo. Our component needs entire Photo object! Let’s take our `activePhotoID$` and create new Observable out of it.
 
