@@ -1,8 +1,3 @@
-Hi there! If you’re reading this I know you’ve already built some web applications and it went pretty well! You know how to store and display data. You know how to react to user events and communicate with servers. Even styling your applications gets easier every time you do it!
-
-Today we’ll dig deeper into managing user and server interaction. With Rx.js you’ll take control of time in your application. You’ll create `Observables` to easily merge, filter, and synchronize events happening in your application. Let’s go!
-
-
 # Photo gallery
 We’re starting with simple photo gallery. To create it we need one service and two components. 
 
@@ -129,7 +124,6 @@ activePhoto$: Observable<Photo> = this.photosService.activePhoto$;
 
 And we have it with a couple lines of code! You assign `activePhoto$` from Photos service to Component field, so we can access `activePhoto$` value in HTML. Because we access asynchronous value that changes over time, we need to use the `async` pipe. The `async` pipe tells Angular it should subscribe to the asynchronous value and use new value every time it changes. Last part `?.url` means: check if `activePhoto$` holds a value, if it does access `url` field from it and display in HTML. Whew! We did it!
 
-## Hiding active photo
 Last thing to do is hiding the photo! It's nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
 
 To hide active photo we need to put empty ID on `activePhotoID$` `BehaviorSubject`. This way Photos service will know to send our components `undefined` value through `activePhoto$` Observable and no photo will be displayed.
@@ -155,3 +149,7 @@ hidePhoto() {
 ```
 
 It looks almost like the code use used in the Photo Compoment to set active Photo ID. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let's try adding some photos!
+
+{% hint style="success" %}
+[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_01_display-photos)
+{% endhint %}

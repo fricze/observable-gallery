@@ -66,3 +66,7 @@ Now, we’re going to use Rx.js function `forkJoin` to create `uploadedImages$`.
 3. It collects data from all Promises, puts data in Array and returns Observable that holds this Array. Quite similar to JavaScript native `Promise.all`, but returns Observable, so we can use all Rx.js operators and functions on it!
 
 And what should happen when we read all images? Take list of sources and merge it with list of images. When data is ready, send it to Photos service via `newPhotos$` Subject.
+
+{% hint style="success" %}
+[See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_02_upload-photos)
+{% endhint %}

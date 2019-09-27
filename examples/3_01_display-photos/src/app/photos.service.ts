@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from "rxjs/operators"
 import { Photo } from "./photo"
 import propEq from 'ramda/es/propEq';
@@ -50,8 +50,6 @@ export class PhotosService {
     ) { }
 
     photos: Photo[] = initialPhotos
-
-    newPhotos$ = new Subject()
 
     noPhotoID = ""
     activePhotoID$ = new BehaviorSubject(this.noPhotoID)

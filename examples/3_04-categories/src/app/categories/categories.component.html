@@ -1,0 +1,11 @@
+<div class="categories">
+    <div *ngFor="let category of categoriesList$ | async"
+         [ngClass]="{'category': true, 'category-new': category.new}"
+         (click)="setActiveCategory(category.id)">
+        {{ category.name }}
+    </div>
+
+    <input class="new-category" type="text" placeholder="new&thinsp;+"
+           [(ngModel)]="newCategoryName"
+           (keyup.enter)="addNewCategory($event.target.value)">
+</div>
