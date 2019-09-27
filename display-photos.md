@@ -1,7 +1,7 @@
 # Photo gallery
 We’re starting with simple photo gallery. To create it we need one service and two components. 
 
-Photos service will start with one field: `photos`. It's an array with a bunch of example photos. First we're going to use it to display our gallery. Later, we'll gradually add Observables and interactvity, based on this array with photos.
+Photos service will start with one field: `photos`. It’s an array with a bunch of example photos. First we’re going to use it to display our gallery. Later, we’ll gradually add Observables and interactvity, based on this array with photos.
 
 Our Photo interface looks like this:
 
@@ -30,7 +30,7 @@ and displays it using `*ngFor*`
 </div>
 ```
 
-As you see there's one component left to implement. `app-photo` which displays an individual photo. In the component code we declare one `Input`
+As you see there’s one component left to implement. `app-photo` which displays an individual photo. In the component code we declare one `Input`
 
 ```typescript
 @Input() photo: { description: string; };
@@ -46,7 +46,7 @@ and use this data in HTML template
 ## First Observable!
 Our photo gallery looks great, but all photos are so small. Users will want to see bigger pictures. Let’s help them do so! When users click on photo we’ll create a nice overlay over our gallery and show the whole photo.
 
-To do it we have to track which photo is currently active. How do we do it? Of course, with help of Rx.js! It provides us with `BehaviorSubject` – object that holds value changing over time. Once we’ve had created BehaviorSubject that stores ID of active photo, we can display it easily.
+To do it we have to track which photo is currently active. How do we do it? Of course, with help of RxJS! It provides us with `BehaviorSubject` – object that holds value changing over time. Once we’ve had created BehaviorSubject that stores ID of active photo, we can display it easily.
 
 ```typescript
 noPhotoID = ""
@@ -82,11 +82,11 @@ activePhoto$: Observable<Photo> = this.activePhotoID$.pipe(
 )
 ```
 
-Only three lines of code and we’re done! This may look complicated, so let's break down what happens in `activePhoto$` and walk through the steps together.
+Only three lines of code and we’re done! This may look complicated, so let’s break down what happens in `activePhoto$` and walk through the steps together.
 
 First: we’re accessing current active photo ID. 
 
-Second: we’re using `pipe` method to transform it into something new. That’s what `pipe` does. Think of it like a coffee grinder- you put coffee in and get coffee out, but shaped just a little bit differently. It takes value from Observable and pipes it through Rx.js operators that create new Observables. Our first `pipe` takes photo ID and maps it to Photo object. 
+Second: we’re using `pipe` method to transform it into something new. That’s what `pipe` does. Think of it like a coffee grinder- you put coffee in and get coffee out, but shaped just a little bit differently. It takes value from Observable and pipes it through RxJS operators that create new Observables. Our first `pipe` takes photo ID and maps it to Photo object. 
 
 Third: we take array of photos and return one Photo whose `id` equals `photoID`. Function `propEq` says exactly that: check if property named `id` equals variable `photoID`.
 
@@ -124,11 +124,11 @@ activePhoto$: Observable<Photo> = this.photosService.activePhoto$;
 
 And we have it with a couple lines of code! You assign `activePhoto$` from Photos service to Component field, so we can access `activePhoto$` value in HTML. Because we access asynchronous value that changes over time, we need to use the `async` pipe. The `async` pipe tells Angular it should subscribe to the asynchronous value and use new value every time it changes. Last part `?.url` means: check if `activePhoto$` holds a value, if it does access `url` field from it and display in HTML. Whew! We did it!
 
-Last thing to do is hiding the photo! It's nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
+Last thing to do is hiding the photo! It’s nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
 
 To hide active photo we need to put empty ID on `activePhotoID$` `BehaviorSubject`. This way Photos service will know to send our components `undefined` value through `activePhoto$` Observable and no photo will be displayed.
 
-Ok, first let's add `hidePhoto` handler to HTML element, like this:
+Ok, first let’s add `hidePhoto` handler to HTML element, like this:
 
 ```html
 <div
@@ -148,7 +148,7 @@ hidePhoto() {
 }
 ```
 
-It looks almost like the code use used in the Photo Compoment to set active Photo ID. Only difference is, this time we're sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let's try adding some photos!
+It looks almost like the code use used in the Photo Compoment to set active Photo ID. Only difference is, this time we’re sending `noPhotoID` instead of real ID. This way no active photo is displayed! What more can we do with our gallery? Maybe… let’s try adding some photos!
 
 {% hint style="success" %}
 [See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_01_display-photos)

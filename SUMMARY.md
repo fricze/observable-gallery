@@ -5,4 +5,4 @@
 * [\#2: More interaction! Upload photos](upload-photos.md)
 * [\#3: Merging Observables](display-uploaded-photos.md)
 * [\#4: Filtering by category](add-categories.md)
-
+* [\#5: Adding photos to category](add-photo-to-category.md)

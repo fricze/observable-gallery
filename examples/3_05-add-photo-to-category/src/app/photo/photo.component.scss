@@ -1,0 +1,26 @@
+:host, img {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+:host {
+    cursor: pointer;
+
+    &, img {
+        transition: all 0.2s ease-in-out;
+    }
+
+    img {
+        object-fit: cover;
+    }
+
+    &:hover {
+        opacity: 0.9;
+        filter: drop-shadow(9px 9px 10px #333) contrast(140%);
+
+        img {
+            transform: scale(1.05);
+        }
+    }
+}

@@ -1,1 +1,0 @@
-# Save photo description
