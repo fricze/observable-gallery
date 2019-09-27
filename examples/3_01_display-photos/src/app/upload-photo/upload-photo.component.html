@@ -1,0 +1,7 @@
+<label for="file">Upload photos</label>
+<input type="file"
+       multiple="multiple"
+       id="file"
+       [(ngModel)]="filesCollection"
+       accept="image/png, image/jpg, image/jpeg"
+       (change)="handleFileInput($event.target.files)">

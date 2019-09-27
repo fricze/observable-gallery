@@ -9,6 +9,12 @@
 
 # dependencies
 /node_modules
+*/node_modules
+*./node_modules
+node_modules
+
+# Book build output
+_book
 
 # profiling files
 chrome-profiler-events*.json

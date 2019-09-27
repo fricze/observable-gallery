@@ -17,7 +17,7 @@ First? Maybe some `categories` component?
 </div>
 ```
 
-So that's how it is. We've already seen some Observables and events handlers so surely you can read this code and get the general idea. Some looping over Observable with categories. CSS class for new categories. Setting active category once user clicks on it. `ngModel` on our input will help us clear it when new category is created. Let's see `addNewCategory` handler.
+So that's how it is. We've already seen some Observables and events handlers so you probably can read this code and get the general idea what's happening. Some looping over Observable with categories. CSS class for new categories. Setting active category once user clicks on it. `ngModel` on our input will help us clear it when new category is created. Let's see `addNewCategory` handler.
 
 ```typescript
 addNewCategory(name: string) {
