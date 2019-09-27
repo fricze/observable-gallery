@@ -1,0 +1,322 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>#2: More interaction! Upload photos · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="display-new-images.html" />
+    
+    
+    <link rel="prev" href="display-photos.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="display-photos.html">
+            
+                <a href="display-photos.html">
+            
+                    
+                    #1: Gallery 101. Display photos
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="upload-photos.html">
+            
+                <a href="upload-photos.html">
+            
+                    
+                    #2: More interaction! Upload photos
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="display-new-images.html">
+            
+                <a href="display-new-images.html">
+            
+                    
+                    #3: Merging Observables. Display uploaded photos
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >#2: More interaction! Upload photos</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="observables-and-promises-upload-some-photos">Observables and Promises. Upload some photos</h1>
+<p>That&#x2019;s nice to see some interaction in your application. You display a bunch of thumbnails, you can click on them to see whole photo, and click again to hide photo. And we&#x2019;ve only created one BehaviorSubject and, basing on it, one Observable. Did you notice how we keep track of active photo? No need to remove old value, nor clean data. You just put next value on Subject and it becomes the current value. Data flows one way. Send some data to Subject &#x2013; react to it. Event happens, you send another piece data &#x2013; you react to it. That&#x2019;s Rx.js bread and butter.</p>
+<p>Next thing that&#x2019;d be nice to have in photo gallery is photo upload. First thing: we create a new component. Let your imagination run wild! If it uploads photos, let&#x2019;s call it: photo-upload! This one is gonna be fun! Here we&#x2019;ll use Rx.js to process stream of incoming photos, pass it to photos service and display in our gallery.</p>
+<h2 id="photo-upload">Photo upload</h2>
+<p>We want to take some data from user. So&#x2026; we should use HTML input! You probably used it for text input before, but it also has file version. How does it look? Roughly, like this:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span>
+       <span class="hljs-attr">multiple</span>=<span class="hljs-string">&quot;multiple&quot;</span>
+       <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;file&quot;</span>
+       [(<span class="hljs-attr">ngModel</span>)]=<span class="hljs-string">&quot;filesCollection&quot;</span>
+       <span class="hljs-attr">accept</span>=<span class="hljs-string">&quot;image/png, image/jpg, image/jpeg&quot;</span>
+       (<span class="hljs-attr">change</span>)=<span class="hljs-string">&quot;handleFileInput($event.target.files)&quot;</span>&gt;</span>
+</code></pre>
+<p>Type <code>file</code> indicates that our element will gather files. <code>multiple=&quot;multiple&quot;</code> means it accepts many files at once. <code>[(ngModel)]=&quot;filesCollection&#x201D;</code> allows us to control value of input from Angular. <code>accept=&quot;image/png, image/jpg, image/jpeg&quot;</code> limits types of files we accept. <code>(change)=&quot;handleFileInput($event.target.files)&quot;</code> means, as you&#x2019;ve already may deduced, that every time new files come to your input, you&#x2019;ll handle them using <code>handleFileInput</code> method. HTML is ready, let&#x2019;s proceed to our Component logic.</p>
+<h2 id="handle-new-files">Handle new files</h2>
+<p>Do you think you&#x2019;re ready to add new photos to your gallery? Because I think you are. Let&#x2019;s see how to implement <code>handleFileInput</code> and break it down, piece by piece:</p>
+<pre><code class="lang-typescript">handleFileInput(images: File[]) {
+    <span class="hljs-keyword">const</span> imagesCollection = <span class="hljs-built_in">Array</span>.from(images)
+    <span class="hljs-keyword">const</span> imagesContent: &lt;Promise&lt;FileContent&gt;&gt; =
+        imagesCollection.map(file =&gt; readFileContent(file))
+
+    <span class="hljs-keyword">const</span> uploadedImages$ = forkJoin(imagesContent).pipe(
+        map(imagesSources =&gt; {
+            <span class="hljs-keyword">const</span> imagesWithSource = imagesCollection.map(
+                (image, idx) =&gt; ({
+                    name: image.name,
+                    id: uuid(),
+                    url: imagesSources[idx]
+                })
+            )
+
+            <span class="hljs-keyword">return</span> imagesWithSource
+        }),
+    )
+
+    uploadedImages$.subscribe(
+        photos =&gt; <span class="hljs-keyword">this</span>.photosService.newPhotos$.next(photos)
+    )
+}
+</code></pre>
+<p>For starters we create constant <code>imagesCollection</code>. File input returns value of type <code>FileList</code>. <code>FileList</code> doesn&#x2019;t have familiar methods like <code>map</code> or <code>forEach</code> so it has to be transformed into Array. From now on we can use all Array methods on it.</p>
+<p>First thing we&#x2019;re gonna do with our images is taking their contents out and saving in browser-friendly format. That&#x2019;s what happens when we create constant <code>imagesContent</code>. We take array of images and map it to array of images content. Because reading file content may take long it is asynchronous. Therefore function <code>readFileContent</code> returns Promise. It opens file, reads it into format browser understands and resolves Promise once file is read.</p>
+<p>Oh my gosh! What now! So far, we&#x2019;ve been dealing with Observables and now we have Array of Promises! What do we do?!</p>
+<p>Stay calm&#x2026; I&#x2019;m gonna tell you a little secret. Rx.js already got your back. It is smart enough to recognize that in some situations there&#x2019;s no visible difference between Observable and Promise. Both are objects that hold reference to value that will come sometime in future. Promise resolves only once, Observable can resolve many times, but, as I said, sometimes it&#x2019;s not that much of a difference.</p>
+<p>Now, we&#x2019;re gonna use Rx.js function <code>forkJoin</code> to create <code>uploadedImages$</code>. It&#x2019;ll take our Array of Promises, wait till all of them resolve, then put all resolved values into one Array and pass it down to Observable. It really is smart! Let&#x2019;s recap, once again, what it does for us.</p>
+<ol>
+<li>We feed it with Array of Promises (objects that will have some value in future).</li>
+<li>It waits for all Promises to resolve.</li>
+<li>It collects data from all Promises, puts data in Array and returns Observable that holds this Array. Quite similar to JavaScript native <code>Promise.all</code>, but returns Observable, so we can use all Rx.js operators and functions on it!</li>
+</ol>
+<p>And what should happen when we read all images? Take list of sources and merge it with list of images. When data is ready, send it to Photos service via newPhotos$ Subject.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="display-photos.html" class="navigation navigation-prev " aria-label="Previous page: #1: Gallery 101. Display photos">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="display-new-images.html" class="navigation navigation-next " aria-label="Next page: #3: Merging Observables. Display uploaded photos">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"#2: More interaction! Upload photos","level":"1.3","depth":1,"next":{"title":"#3: Merging Observables. Display uploaded photos","level":"1.4","depth":1,"path":"display-new-images.md","ref":"display-new-images.md","articles":[]},"previous":{"title":"#1: Gallery 101. Display photos","level":"1.2","depth":1,"path":"display-photos.md","ref":"display-photos.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"upload-photos.md","mtime":"2019-09-27T09:06:15.633Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-09-27T09:07:39.507Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

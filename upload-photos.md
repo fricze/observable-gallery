@@ -6,7 +6,7 @@ Next thing that’d be nice to have in photo gallery is photo upload. First thin
 ## Photo upload
 We want to take some data from user. So… we should use HTML input! You probably used it for text input before, but it also has file version. How does it look? Roughly, like this:
 
-```
+```html
 <input type="file"
        multiple="multiple"
        id="file"
@@ -20,7 +20,7 @@ Type `file` indicates that our element will gather files. `multiple="multiple"` 
 ## Handle new files
 Do you think you’re ready to add new photos to your gallery? Because I think you are. Let’s see how to implement `handleFileInput` and break it down, piece by piece:
 
-```
+```typescript
 handleFileInput(images: File[]) {
     const imagesCollection = Array.from(images)
     const imagesContent: <Promise<FileContent>> =
