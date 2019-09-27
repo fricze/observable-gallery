@@ -1,7 +1,7 @@
 # Add categories
-Wow! That was a nice ride! What now? Is our gallery finished? Of course not. Once you upload more and more photos you’d probably want to create some categories or tags. If we’d mix dogs memes with memories from our last pizzeria visit, the gallery would make no sense. Let’s go and some categories.
+Wow! That was a nice ride! What now? Is our gallery finished? Of course not. Once you upload more and more photos you’d probably want to create some categories or tags. If we’d mix dogs memes with memories from our last pizzeria visit, the gallery would make no sense. Let’s go and add categories.
 
-First? Maybe some Categories component?
+First? Maybe some Categories Component?
 
 ```html
 <div class="categories">
@@ -135,7 +135,7 @@ mergeCategories = map(([categories, newCategories, activeCategoryID]) =>
     ))
 ```
 
-Now it flattens `categories` and `newCategories` into one array, but also adds new field `active` to each of them so we can use it in HTML template to add some class, like `active-category` and mark this category with CSS. We have photos, we have categories, we have created few Observables! Time to celebrate and add more features!
+Now it flattens `categories` and `newCategories` into one array, but also adds new field `active` to each of them so we can use it in HTML template to add some class, like `active-category` and mark this category with CSS. We have photos, we have categories, we have created few Observables! Time to celebrate and think what more can we do with our gallery!
 
 {% hint style="success" %}
 [See the results on StackBlitz](https://stackblitz.com/github/jonki/observable-gallery/tree/master/examples/3_04-categories/)

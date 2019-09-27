@@ -59,7 +59,7 @@ photos$ = combineLatest(of(this.photos), this.allNewPhotos$).pipe(map(flatten))
 
 Take all arrays that are sent from two Observables and flatten them all into one. I have to say, it’s quite elegant!
 
-And what do we have to do, to display these new photos on our photos list? Just two little changes in our Gallery component.
+And what do we have to do, to display these new photos on our photos list? Just two little changes in our Gallery Component.
 
 First we change photosList to `photosList$`:
 

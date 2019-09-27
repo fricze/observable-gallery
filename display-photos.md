@@ -1,5 +1,5 @@
 # Photo gallery
-We’re starting with simple photo gallery. To create it we need one service and two components. 
+We’re starting with simple photo gallery. To create it we need one service and two Components. 
 
 Photos service will start with one field: `photos`. It’s an array with a bunch of example photos. First we’re going to use it to display our gallery. Later, we’ll gradually add Observables and interactvity, based on this array with photos.
 
@@ -14,7 +14,7 @@ export interface Photo {
 }
 ```
 
-so `photos` in Photos service has type `Photo[]`. Gallery component refers to the list of photos
+so `photos` in Photos service has type `Photo[]`. Gallery Component refers to the list of photos
 
 ```typescript
 photosList: Photo[] = this.photosService.photos;
@@ -30,7 +30,7 @@ and displays it using `*ngFor*`
 </div>
 ```
 
-As you see there’s one component left to implement. `app-photo` which displays an individual photo. In the component code we declare one `Input`
+As you see there’s one Component left to implement. `app-photo` which displays an individual photo. In the Component code we declare one `Input`
 
 ```typescript
 @Input() photo: { description: string; };
@@ -69,12 +69,12 @@ onPhotoClick(photoID: string) {
 }
 ```
 
-Just refer the `activePhotoID$` and call `next` on it! You’ve just connected user event with `Observable`. Great job! Now you can subscribe to it and display active photo.
+Just refer the `activePhotoID$` and call `next` on it! You’ve just connected user event with Observable. Great job! Now you can subscribe to it and display active photo.
 
 # Creating new value from Observable
-To display active photo let’s create a new component called (you guessed it) `active-photo`. It will access a photo that is currently active and display it.
+To display active photo let’s create a new Component called (you guessed it) `active-photo`. It will access a photo that is currently active and display it.
 
-But, you probably thinking now, in our photos service, we only store the ID of the photo. Our component needs entire Photo object! Let’s take our `activePhotoID$` and create new Observable out of it.
+But, you probably thinking now, in our photos service, we only store the ID of the photo. Our Component needs entire Photo object! Let’s take our `activePhotoID$` and create new Observable out of it.
 
 ```typescript
 activePhoto$: Observable<Photo> = this.activePhotoID$.pipe(
@@ -126,7 +126,7 @@ And we have it with a couple lines of code! You assign `activePhoto$` from Photo
 
 Last thing to do is hiding the photo! It’s nice that user can see bigger photos, but refreshing application every time one wants to change photo preview would be a little… cumbersome ;)
 
-To hide active photo we need to put empty ID on `activePhotoID$` `BehaviorSubject`. This way Photos service will know to send our components `undefined` value through `activePhoto$` Observable and no photo will be displayed.
+To hide active photo we need to put empty ID on `activePhotoID$` `BehaviorSubject`. This way Photos service will know to send our Components `undefined` value through `activePhoto$` Observable and no photo will be displayed.
 
 Ok, first let’s add `hidePhoto` handler to HTML element, like this:
 

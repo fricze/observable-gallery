@@ -3,7 +3,7 @@ That’s nice to see some interaction in your application. You display a bunch o
 
 To do so, we created one BehaviorSubject and one Observable. Did you notice how we keep track of active photo? No need to remove old value, nor clean data. You just put next value on Subject and it becomes the current value. Data flows one way. Send some data to Subject – react to it. Event happens, you send another piece data – you react to it. That’s RxJS bread and butter.
 
-Next thing that’d be nice to have in photo gallery is photo upload. First thing: we create a new component. Let your imagination run wild! If it uploads photos, let’s call it: photo-upload! This one is going to be fun! Here we’ll use RxJS to process stream of incoming photos, pass it to photos service and display in our gallery.
+Next thing that’d be nice to have in photo gallery is photo upload. First thing: we create a new Component. Let your imagination run wild! If it uploads photos, let’s call it: `photo-upload`! This one is going to be fun! Here we’ll use RxJS to process stream of incoming photos, pass it to photos service and display in our gallery.
 
 ## Photo upload
 We want to take some data from user. So… we should use HTML input! You probably used it for text input before, but it also has file version. How does it look? Roughly, like this:
